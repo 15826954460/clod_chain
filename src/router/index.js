@@ -6,27 +6,43 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
+    name: "login-home",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/register",
+    name: "register-home",
+    component: () => import("../views/Register.vue"),
+  },
+  {
+    path: "/home",
     name: "home-page",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Home.vue"),
     children: [
       {
-        path: "/",
+        path: "index",
         name: "user-page",
         component: () => import("../views/user/Index.vue"),
       },
       {
-        path: "/equipment",
+        path: "equipment",
         name: "equipment-page",
         component: () => import("../views/equipment/Index.vue"),
       },
       {
-        path: "/warnning",
+        path: "warnning",
         name: "warnning-page",
         component: () => import("../views/warning/Index.vue"),
       },
     ]
   },
+  {
+    path: "/*",
+    redirect: {
+      path: "/home"
+    }
+  }
 ];
 
 const router = new VueRouter({
