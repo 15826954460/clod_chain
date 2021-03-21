@@ -24,3 +24,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+#### 业务需求
+- [x] 登录
+- [ ] 短信验证带开发

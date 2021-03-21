@@ -1,52 +1,63 @@
 <template>
-  <a-layout id="components-layout-demo-top-side">
-    <a-layout-header
-      style="background-color: rgba(0, 21, 41, 0.7); height: 60px; display: flex; flex-direction: row; justify-content: space-between; center; align-items: center; padding: 0 30px 0 50px"
-    >
-      <div class="logo" />
-      <span class="__ellip user-name">用户名</span>
-    </a-layout-header>
-    <a-layout style="background: #fff">
-      <a-layout-sider width="200" style="background: #fff">
-        <a-menu
-          mode="inline"
-          :default-selected-keys="['1']"
-          :default-open-keys="['sub1']"
-          style="height: 100%; padding: 0; overflow-y: scroll"
-          theme="dark"
-          @click="handleMeunItem"
-        >
-          <a-menu-item key="/">首页</a-menu-item>
-          <a-sub-menu key="sub1">
-            <span slot="title">
-              <a-icon type="deployment-unit" />设备信息
-            </span>
-            <a-menu-item key="/equipment">设备列表</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <span slot="title">
-              <a-icon type="warning" />报警系统
-            </span>
-            <a-menu-item key="/warnning">报警列表</a-menu-item>
-          </a-sub-menu>
-        </a-menu>
-      </a-layout-sider>
-      <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-        <router-view></router-view>
-      </a-layout-content>
+  <div>
+    <LoginAndRegister v-if="!isLogin"></LoginAndRegister>
+    <a-layout v-else id="components-layout-demo-top-side">
+      <a-layout-header
+        style="background-color: rgba(0, 21, 41, 0.7); height: 60px; display: flex; flex-direction: row; justify-content: space-between; center; align-items: center; padding: 0 30px 0 50px"
+      >
+        <div class="logo" />
+        <span class="__ellip user-name">用户名</span>
+      </a-layout-header>
+      <a-layout style="background: #fff">
+        <a-layout-sider width="200" style="background: #fff">
+          <a-menu
+            mode="inline"
+            :default-selected-keys="['1']"
+            :default-open-keys="['sub1']"
+            style="height: 100%; padding: 0; overflow-y: scroll"
+            theme="dark"
+            @click="handleMeunItem"
+          >
+            <a-menu-item key="/">首页</a-menu-item>
+            <a-sub-menu key="sub1">
+              <span slot="title">
+                <a-icon type="deployment-unit" />设备信息
+              </span>
+              <a-menu-item key="/equipment">设备列表</a-menu-item>
+            </a-sub-menu>
+            <a-sub-menu key="sub2">
+              <span slot="title">
+                <a-icon type="warning" />报警系统
+              </span>
+              <a-menu-item key="/warnning">报警列表</a-menu-item>
+            </a-sub-menu>
+          </a-menu>
+        </a-layout-sider>
+        <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
+          <router-view></router-view>
+        </a-layout-content>
+      </a-layout>
+      <a-layout-footer
+        style="text-align: center; height: 60px; padding: 0; display: flex; flex-direction: row; align-items: center; justify-content: center"
+      >{{ $t("footer.icp") }}</a-layout-footer>
     </a-layout>
-    <a-layout-footer
-      style="text-align: center; height: 60px; padding: 0; display: flex; flex-direction: row; align-items: center; justify-content: center"
-    >{{ $t("footer.icp") }}</a-layout-footer>
-  </a-layout>
+  </div>
 </template>
 
 <script>
+import LoginAndRegister from "@/components/LoginAndRegister.vue";
+
 export default {
   name: "app-home",
 
   data() {
-    return {};
+    return {
+      isLogin: false,
+    };
+  },
+
+  components: {
+    LoginAndRegister
   },
 
   computed: {},
@@ -63,6 +74,7 @@ export default {
 <style lang="scss" scoped>
 #components-layout-demo-top-side {
   height: 100vh;
+  width: 100vw;
 }
 .logo {
   display: inline-block;
@@ -79,9 +91,10 @@ export default {
   font-weight: 600px;
   border-radius: 50%;
   color: #fff;
+  background-color: rgba(0, 0, 0, 0.1);
   &:hover {
     cursor: pointer;
-    background-color: rgba(0,0,0, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
 }
 </style>

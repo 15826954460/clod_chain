@@ -1,7 +1,7 @@
 <template>
-  <div class="register">
+  <a-form class="register">
     register
-  </div>
+  </a-form>
 </template>
 
 <script>
