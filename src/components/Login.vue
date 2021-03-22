@@ -8,7 +8,7 @@
       <a-input
         size="large"
         v-decorator="[
-          'userName',
+          'username',
           { rules: [{ required: true, message: '请输入用户名' }] },
         ]"
         placeholder="请输入用户名"

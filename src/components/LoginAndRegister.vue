@@ -6,11 +6,11 @@
     :closable="closable"
     :footer="null"
     :maskStyle="maskStyle"
-    :bodyStyle="bodyStyle"
+    :bodyStyle="{ ...bodyStyle, padding: isShowLogin ? '40px' : '20px' }"
     :width="isShowLogin ? 450 : 800"
   >
-    <Login v-if="isShowLogin" @loginRegisterSwitch="loginRegisterSwitch"></Login>
-    <Register v-else></Register>
+    <Login v-if="isShowLogin" @loginRegisterSwitch="loginRegisterSwitch" @visibleChange="visibleChange"></Login>
+    <Register v-else @visibleChange="visibleChange"></Register>
   </a-modal>
 </template>
 
@@ -36,7 +36,7 @@ export default {
     },
     isShowLogin: {
       type: Boolean,
-      default: true
+      default: false
     },
     maskStyle: {
       type: Object,
@@ -72,6 +72,10 @@ export default {
   methods: {
     loginRegisterSwitch(bool) {
       this.isShowLogin = bool;
+    },
+
+    visibleChange(bool = false) {
+      this.visible = bool;
     }
   }
 };
