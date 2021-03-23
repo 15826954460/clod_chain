@@ -6,7 +6,7 @@
 
 import axios from 'axios';
 import store from '@/store/index';
-import utils from '@/utils';
+import common from '@/utils/common';
 import { baseUrl } from '@/config/base-url';
 
 const TIME_OUT = 1000 * 60; // 请求超时时间
@@ -19,7 +19,8 @@ let customAxios = axios.create({
   baseURL: baseUrl,
   timeout: TIME_OUT, // 默认请求超时时间
   headers: {
-    'Content-Type': 'application/json; charset=UTF-8',
+    // 'Content-Type': 'application/json; charset=UTF-8',
+    "Content-Type": "multipart/form-data",
     Authorization: '' // 权限鉴别字段默认为空
   },
   withCredentials: true, // 请求凭证
@@ -31,7 +32,13 @@ let customAxios = axios.create({
 let _requestInstance = customAxios.interceptors.request.use(
   config => {
     /** 根据实际业务写逻辑 */
-    return config;
+    const { headers } = config;
+    return {
+      ...config, headers: {
+        ...headers,
+        toekn: store.state.user.token
+      }
+    };
   },
   error => {
     return Promise.reject(error);
@@ -54,13 +61,13 @@ let _responseInstance = customAxios.interceptors.response.use(
 )
 
 /** 启用拦截 */
-function setInterceptorsStack (interfaceKey) {
+function setInterceptorsStack(interfaceKey) {
   requestInstanceStack.set(interfaceKey, _requestInstance);
   responseInstanceStack.set(interfaceKey, _responseInstance);
 }
 
 /** 删除拦截和改拦截实例 */
-function deleteInterceptors (interfaceKey) {
+function deleteInterceptors(interfaceKey) {
   // 清除拦截栈
   requestInstanceStack.delete(interfaceKey);
   responseInstanceStack.delete(interfaceKey);
@@ -71,7 +78,7 @@ function deleteInterceptors (interfaceKey) {
 }
 
 // 对 get 请求简易封装
-export function getFetch ({
+export function getFetch({
   url = '',
   params = {},
   interfaceKey = '',
@@ -88,7 +95,7 @@ export function getFetch ({
       method: 'get',
       url: url,
       params: params,
-      cancelToken: (!cancel && axios.CancelToken(function executor (c) {
+      cancelToken: (!cancel && axios.CancelToken(function executor(c) {
         cancelFetch.set(interfaceKey, c);
       })),
     }).then(response => {
@@ -103,7 +110,7 @@ export function getFetch ({
          */
       }
     }).catch(error => {
-      utils.log(`请求当前的接口为 ${url} 错误信息为 ${error}`);
+      common.log(`请求当前的接口为 ${url} 错误信息为 ${error}`);
       /**
        *  这里可以配置一些关于操作失败的提示信息：比如获取数据失败等等
        *  或者失败的毁掉函数
@@ -114,7 +121,7 @@ export function getFetch ({
 }
 
 // 对 post 请求简易封装
-export function postFetch ({
+export function postFetch({
   url = '',
   params = {},
   interfaceKey = '',
@@ -131,7 +138,7 @@ export function postFetch ({
       method,
       url,
       data: params,
-      cancelToken: (!cancel && axios.CancelToken(function executor (c) {
+      cancelToken: (!cancel && axios.CancelToken(function executor(c) {
         cancelFetch.set(interfaceKey, c);
       })),
     }).then(response => {
@@ -150,14 +157,14 @@ export function postFetch ({
        * 这里可以配置一些关于操作失败的提示信息：比如获取数据失败等等
        * reject 方法的参数会传到外部的catch方法，建议关于提示信息统一封装在这里处理，不要放到业务层
        */
-      utils.log(`请求当前的接口为 ${url} 错误信息为 ${error}`)
+      common.log(`请求当前的接口为 ${url} 错误信息为 ${error}`)
       reject(error)
     });
   });
 }
 
 // 文件上传
-export function uploadFile ({
+export function uploadFile({
   url = '',
   params = {},
   interfaceKey = '',
@@ -178,13 +185,13 @@ export function uploadFile ({
         accept: "application/json",
         "Content-Type": "multipart/form-data"
       },
-      cancelToken: (!cancel && axios.CancelToken(function executor (c) {
+      cancelToken: (!cancel && axios.CancelToken(function executor(c) {
         cancelFetch.set(interfaceKey, c);
       })),
       onUploadProgress: e => {
         if (e.total > 0) {
           e.percent = (e.loaded / e.total) * 100;
-          utils.log(`当前上传进度为：${e.percent}`);
+          common.log(`当前上传进度为：${e.percent}`);
         }
       }
     }).then(response => {
@@ -203,7 +210,7 @@ export function uploadFile ({
        * 这里可以配置一些关于操作失败的提示信息：比如获取数据失败等等
        * reject 方法的参数会传到外部的catch方法，建议关于提示信息统一封装在这里处理，不要放到业务层
        */
-      utils.log(`请求当前的接口为 ${url} 错误信息为 ${error}`)
+      common.log(`请求当前的接口为 ${url} 错误信息为 ${error}`)
       reject(error)
     });
   });

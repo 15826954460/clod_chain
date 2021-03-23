@@ -9,7 +9,7 @@ import { isPro, isTest } from './env';
 let baseUrl = '';
 
 if (isTest) {
-  // baseUrl = 'https://template-test.wps.com/client-server';
+  baseUrl = 'http://47.100.25.58:8080/';
 }
 
 if (isPro) {

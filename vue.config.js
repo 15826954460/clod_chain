@@ -6,7 +6,7 @@ module.exports = {
     host: '0.0.0.0',
     port: 10021,
     disableHostCheck: true,
-    // proxy: 'https://template-test.wps.com/client-server/',
+    proxy: 'http://47.100.25.58:8080/',
   },
   productionSourceMap: false,
   chainWebpack: config => {

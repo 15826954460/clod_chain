@@ -18,6 +18,13 @@ class Common {
     }
     return "";
   }
+
+  log(val) {
+    if (process.env.NODE_ENV === 'production') {
+      return;
+    }
+    console.log(val);
+  }
 }
 
 export default new Common();
