@@ -6,6 +6,7 @@
 
 const state = {
   isNetError: false,
+  isLogined: false,
 };
 
 const mutations = {
@@ -13,6 +14,10 @@ const mutations = {
     if (state.isNetError === bool) return;
     state.isNetError = bool;
   },
+
+  updateLogin(state, bool) {
+    state.isLogined = bool;
+  }
 };
 
 const actions = {};

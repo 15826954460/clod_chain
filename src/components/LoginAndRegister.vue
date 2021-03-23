@@ -1,5 +1,6 @@
 <template>
   <a-modal
+    :title="isShowLogin ? '' : '注册'"
     :visible="visible"
     centered
     :isShowClose="isShowClose"
@@ -9,8 +10,12 @@
     :bodyStyle="{ ...bodyStyle, padding: isShowLogin ? '40px' : '20px' }"
     :width="isShowLogin ? 450 : 800"
   >
-    <Login v-if="isShowLogin" @loginRegisterSwitch="loginRegisterSwitch" @visibleChange="visibleChange"></Login>
-    <Register v-else @visibleChange="visibleChange"></Register>
+    <Login
+      v-if="isShowLogin"
+      @loginRegisterSwitch="loginRegisterSwitch"
+      @visibleChange="visibleChange"
+    ></Login>
+    <Register v-else @loginRegisterSwitch="loginRegisterSwitch" @visibleChange="visibleChange"></Register>
   </a-modal>
 </template>
 
@@ -22,19 +27,11 @@ export default {
   name: "login-and-register",
 
   props: {
-    visible: {
-      type: Boolean,
-      default: true
-    },
     isShowClose: {
       type: Boolean,
       default: false
     },
     closable: {
-      type: Boolean,
-      default: false
-    },
-    isShowLogin: {
       type: Boolean,
       default: false
     },
@@ -50,22 +47,23 @@ export default {
       type: Object,
       default: () => {
         return {
-          padding: '40px',
+          padding: "40px"
         };
       }
     }
   },
 
   data() {
-    return {};
+    return {
+      visible: true,
+      isShowLogin: true
+    };
   },
 
   components: {
     Login,
     Register
   },
-
-  created() {},
 
   mounted() {},
 

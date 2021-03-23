@@ -21,6 +21,7 @@
           label="密码"
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
+          extra="包含大小写字母、数字、特殊字符,长度>=6"
         >
           <a-input-password
             v-decorator="[
@@ -35,13 +36,28 @@
     <a-row :gutter="20">
       <a-col :span="12">
         <a-form-item
+          label="姓名"
+          :label-col="formItemLayout.labelCol"
+          :wrapper-col="formItemLayout.wrapperCol"
+        >
+          <a-input
+            v-decorator="[
+              'trueName',
+              { rules: [{ required: true, message: '请输入姓名' }] },
+            ]"
+            placeholder="请输入姓名"
+          />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item
           label="手机号"
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
         >
           <a-input
             v-decorator="[
-              'phoneNumber',
+              'phone',
               { 
                 rules: [
                   { 
@@ -53,21 +69,6 @@
               },
             ]"
             placeholder="请输入手机号"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item
-          label="邮箱"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
-          <a-input
-            v-decorator="[
-              'email',
-              { rules: [{ required: false, message: '邮箱格式无效', pattern: /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/ }] },
-            ]"
-            placeholder="请输入邮箱"
           />
         </a-form-item>
       </a-col>
@@ -92,18 +93,33 @@
     <a-row :gutter="20">
       <a-col :span="12">
         <a-form-item
-          label="选择地区"
+          label="选择地址"
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
         >
           <a-cascader
             :options="options"
-            placeholder="请选择地区"
+            placeholder="请选择地址"
             @change="selAddrChange"
             v-decorator="[
               'area',
-              { rules: [{ required: true, message: '请输入地址' }] },
+              { rules: [{ required: true, message: '请选择地址' }] },
             ]"
+          />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item
+          label="邮箱"
+          :label-col="formItemLayout.labelCol"
+          :wrapper-col="formItemLayout.wrapperCol"
+        >
+          <a-input
+            v-decorator="[
+              'email',
+              { rules: [{ required: false, message: '邮箱格式无效', pattern: /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/ }] },
+            ]"
+            placeholder="请输入邮箱"
           />
         </a-form-item>
       </a-col>
@@ -135,9 +151,12 @@
 
 <script>
 import { areaList } from "@/constant/province-data";
+import api from "@/axios/api";
 
 // 密码必须有数字、大写、小写、特殊字符组成,长度不能小于8
-const pwdRegex = new RegExp(/(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{8}/);
+const pwdRegex = new RegExp(
+  /(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{6}/
+);
 
 const formItemLayout = {
   labelCol: { span: 6 },
@@ -157,7 +176,7 @@ export default {
       options: areaList,
       formItemLayout,
       addressItemLayout,
-      form: this.$form.createForm(this, { name: "dynamic_rule" })
+      form: this.$form.createForm(this, { name: "normal_register" })
     };
   },
 
@@ -178,8 +197,8 @@ export default {
       if (!value.length) {
         message = new Error("请输入密码");
       }
-      if (value.length < 8) {
-        message = new Error("密码长度不能小于8");
+      if (value.length < 6) {
+        message = new Error("密码长度不能小于6");
       }
       if (!pwdRegex.test(value)) {
         message = new Error("密码必须由大小写字母、数字、特殊字符组成");
@@ -189,20 +208,34 @@ export default {
 
     cancelHandle() {
       this.form.resetFields();
-      this.$emit('visibleChange');
+      this.$emit("visibleChange");
     },
 
     sureHandle(e) {
       e.preventDefault();
-      this.form.validateFields((err, values) => {
-        console.log('-----------sureHandle', values);
+      this.form.validateFields(async (err, values) => {
         if (err) {
           console.log("Received values of form: ", values);
           return;
         }
-        const { area, ...options } = values;
-        options.area = area.join('');
-        // 接口请求
+        const { area, address, ...options } = values;
+        if (area[0] === area[1]) {
+          options.are = `${area[1]}市${area[2]}区${address}`;
+        } else {
+          options.are = `${area[0]}省${area[1]}市${area[2]}区${address}`;
+        }
+        console.log(111, options);
+        const { code, data } = await api.user.register(options);
+        if (code === 200) {
+          this.$message.success("注册成功,即将跳转到登录页面", 2.5);
+          let __timer = setTimeout(() => {
+            this.$emit("loginRegisterSwitch", true);
+            clearTimeout(__timer);
+            __timer = null;
+          }, 1000);
+        } else {
+          this.$message.error("注册失败,请重新尝试");
+        }
       });
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <LoginAndRegister v-if="!isLogin"></LoginAndRegister>
-    <a-layout v-else id="components-layout-demo-top-side">
+    <LoginAndRegister v-show="!isLogined"></LoginAndRegister>
+    <a-layout v-show="isLogined" id="components-layout-demo-top-side">
       <a-layout-header
         style="background-color: rgba(0, 21, 41, 0.7); height: 60px; display: flex; flex-direction: row; justify-content: space-between; center; align-items: center; padding: 0 30px 0 50px"
       >
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import LoginAndRegister from "@/components/LoginAndRegister.vue";
 
 export default {
@@ -52,7 +53,6 @@ export default {
 
   data() {
     return {
-      isLogin: false,
     };
   },
 
@@ -60,7 +60,11 @@ export default {
     LoginAndRegister
   },
 
-  computed: {},
+  computed: {
+    ...mapState({
+      isLogined: state => state.isLogined,
+    }),
+  },
 
   methods: {
     handleMeunItem({ keyPath, key }) {

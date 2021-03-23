@@ -21,10 +21,10 @@
         size="large"
         v-decorator="[
           'password',
-          { rules: [{ required: true, min: 8, message: '请输入正确格式密码' }] },
+          { rules: [{ required: true, message: '请输入正确格式密码' }] },
         ]"
         type="password"
-        placeholder="请输入密码(数字、大、小写字母、长度 >= 8)"
+        placeholder="请输入密码"
       >
         <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
       </a-input>
@@ -40,17 +40,21 @@
 </template>
 
 <script>
+import api from "@/axios/api";
+import { mapMutations, createNamespacedHelpers } from "vuex";
+const {
+  mapState: mapStateUser,
+  mapMutations: mapMutationsUser
+} = createNamespacedHelpers("user");
+
 export default {
   name: "login-page",
 
   data() {
-    return {
-    };
+    return {};
   },
 
   components: {},
-
-  created() {},
 
   beforeCreate() {
     this.form = this.$form.createForm(this, { name: "normal_login" });
@@ -59,20 +63,32 @@ export default {
   mounted() {},
 
   methods: {
+    ...mapMutations(['updateLogin']),
+    ...mapMutationsUser(['updateUserType', 'updateToken']),
+
     handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFields((err, values) => {
+      this.form.validateFields(async (err, values) => {
         if (err) {
           console.log("Received values of form: ", values);
           return;
         }
+        const { code, data: { userType, token } } = await api.user.login(values);
         // 接口请求
+        if (code === 200) {
+          this.updateUserType(userType);
+          this.updateToken(token);
+          this.updateLogin(true);
+          this.$emit("visibleChange");
+        } else {
+          this.$message.error('登录失败,请重新尝试');
+        }
       });
     },
 
     registerHander() {
       this.form.resetFields();
-      this.$emit('loginRegisterSwitch', false);
+      this.$emit("loginRegisterSwitch", false);
     }
   }
 };
