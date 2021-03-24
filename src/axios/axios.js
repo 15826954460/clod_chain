@@ -8,6 +8,8 @@ import axios from 'axios';
 import store from '@/store/index';
 import common from '@/utils/common';
 import { baseUrl } from '@/config/base-url';
+import sessionStorage from "@/utils/session-storage";
+import { TOKEN } from "@/constant";
 
 const TIME_OUT = 1000 * 60; // 请求超时时间
 
@@ -44,22 +46,22 @@ let _requestInstance = customAxios.interceptors.request.use(
   config => {
     /** 根据实际业务写逻辑 */
     const { headers, method, data, params } = config;
-    if (method.toUpperCase() === "POST") {
+    if (method.toUpperCase() !== "GET") {
       return {
         ...config,
         data: __createFormData(data),
         headers: {
           ...headers,
-          toekn: store.state.user.token
+          toekn: store.state.user.token || sessionStorage.get(TOKEN),
         }
       }
     } else {
       return {
         ...config,
-        params: __createFormData(params),
+        // params: __createFormData(params),
         headers: {
           ...headers,
-          toekn: store.state.user.token
+          toekn: store.state.user.token || sessionStorage.get(TOKEN),
         }
       }
     }

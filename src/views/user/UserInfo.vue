@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="register-wrapper">
-      <Register extra=""></Register>
+      <Register extra="" :userInfo="userInfo" :isUpdateUserInfo="true"></Register>
     </div>
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import api from "@/axios/api";
 import Register from "@/components/Register.vue";
+import { USER_INFO } from "@/constant"
 
 import { mapState, createNamespacedHelpers, mapMutations } from "vuex";
 const {
@@ -27,17 +28,26 @@ export default {
     Register,
   },
 
+  computed: {
+    ...mapStateUser({
+      userId: state => state.userInfo.userId,
+      userInfo: state => state.userInfo,
+    }),
+  },
+
   mounted() {
-    // this.getUserInfo();
+    this.getUserInfo();
   },
 
   methods: {
     ...mapMutationsUser(['updateUserInfo']),
 
     async getUserInfo() {
-      const { code, data } = await api.getUserInfo();
-      if (code === 0) {
-        console.log(1111, data);
+      const { code, data } = await api.user.getUserInfo({ id: this.userId });
+      if (code === 200) {
+        const { email, phone, trueName, username, userType, id: userId } = data;
+        this.updateUserInfo({ email, phone, trueName, username, userId, userType });
+        sessionStorage.set(USER_INFO, { userType, username, trueName, userId, phone, email });
       } else {
         this.$message.error('获取用户信息失败，请稍后再试')
       }

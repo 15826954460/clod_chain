@@ -25,24 +25,21 @@ export default {
       }); 
     },
 
-    getUserInfo() {
+    getUserInfo(params) {
       return getFetch({
-        url: "/users"
+        url: "/users",
+        interfaceKey: "getUserInfo",
+        params,
       });
     },
 
-    post() {
+    updateUserInfo(params) {
       return postFetch({
-        url: "/api/projects",
-        interfaceKey: "getProjectList",
+        url: "/users",
+        interfaceKey: "updateUserInfo",
+        params,
+        method: 'PUT',
       });
-    },
-
-    upload() {
-      return uploadFile({
-        url: "/api/projects",
-        interfaceKey: "getProjectList",
-      });
-    },
+    }
   },
 };

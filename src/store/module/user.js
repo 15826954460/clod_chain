@@ -8,6 +8,10 @@ const state = {
   userInfo: {
     userType: 0, // 1: 超管 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户
     username: '',
+    phone: null,
+    tureName: '',
+    userId: '',
+    email: '',
   },
 };
 

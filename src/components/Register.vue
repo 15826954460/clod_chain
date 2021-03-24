@@ -20,7 +20,7 @@
         </a-form-item>
       </a-col>
     </a-row>
-    <a-row :gutter="20">
+    <a-row :gutter="20" v-if="!isUpdateUserInfo">
       <a-col :span="12">
         <a-form-item
           label="密码"
@@ -72,7 +72,7 @@
             v-decorator="[
               'phone',
               {
-                initialValue: userInfo.trueName || '',
+                initialValue: userInfo.phone || '',
                 rules: [
                   {
                     required: true,
@@ -192,6 +192,12 @@
 import { areaList } from "@/constant/province-data";
 import api from "@/axios/api";
 
+import { mapState, createNamespacedHelpers, mapMutations } from "vuex";
+const {
+  mapState: mapStateUser,
+  mapMutations: mapMutationsUser,
+} = createNamespacedHelpers("user");
+
 // 密码必须有数字、大写、小写、特殊字符组成,长度不能小于8
 const pwdRegex = new RegExp(
   /(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{6}/
@@ -218,9 +224,12 @@ export default {
     userInfo: {
       type: Object,
       default: () => {
-        return {
-        };
+        return {};
       },
+    },
+    isUpdateUserInfo: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -231,6 +240,12 @@ export default {
       addressItemLayout,
       form: this.$form.createForm(this),
     };
+  },
+
+  computed: {
+    ...mapStateUser({
+      userId: state => state.userInfo.userId,
+    }),
   },
 
   methods: {
@@ -261,29 +276,47 @@ export default {
     sureHandle(e) {
       e.preventDefault();
       this.form.validateFields(async (err, values) => {
+        console.log(1111, values);
         if (err) {
-          console.log("Received values of form: ", values);
+          console.log("Received values of form: ", err);
           return;
         }
-        const { area, address } = values;
-        if (area[0] === area[1]) {
-          values.detailAdress = `${area[1]}市${area[2]}区${address}`;
+        // const { area, address } = values;
+        // if (area[0] === area[1]) {
+        //   values.detailAdress = `${area[1]}市${area[2]}区${address}`;
+        // } else {
+        //   values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
+        // }
+        if (this.isUpdateUserInfo) {
+          this.updateUserInfo({ ...values, id: this.userId });
         } else {
-          values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
-        }
-        const { code, data } = await api.user.register(values);
-        if (code === 200) {
-          this.$message.success("注册成功,即将跳转到登录页面", 2.5);
-          let __timer = setTimeout(() => {
-            this.$emit("loginRegisterSwitch", true);
-            clearTimeout(__timer);
-            __timer = null;
-          }, 1000);
-        } else {
-          this.$message.error("注册失败,请重新尝试");
+          this.register(values);
         }
       });
     },
+
+    async register(values) {
+      const { code } = await api.user.register(values);
+      if (code === 200) {
+        this.$message.success("注册成功,即将跳转到登录页面", 2.5);
+        let __timer = setTimeout(() => {
+          this.$emit("loginRegisterSwitch", true);
+          clearTimeout(__timer);
+          __timer = null;
+        }, 1000);
+      } else {
+        this.$message.error("注册失败,请重新尝试");
+      }
+    },
+
+    async updateUserInfo(values) {
+      const { code, data } = await api.user.updateUserInfo(values);
+      if (code === 200) {
+        console.log(11111, data);
+      } else {
+        this.$message.error("注册失败,请重新尝试");
+      }
+    }
   },
 };
 </script>

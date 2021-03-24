@@ -71,14 +71,14 @@ export default {
           console.log("Received values of form: ", values);
           return;
         }
-        const { code, data: { userType, token, username } } = await api.user.login(values);
+        const { code, data: { userType, token, username, trueName, roleName, id: userId, phone, email } } = await api.user.login(values);
         // 接口请求
         if (code === 200) {
-          this.updateUserInfo({ userType, username });
+          this.updateUserInfo({ userType, username, trueName, roleName, userId, phone, email });
           this.updateToken(token);
           this.updateLogin(true);
           sessionStorage.set(TOKEN, token);
-          sessionStorage.set(USER_INFO, { userType, username });
+          sessionStorage.set(USER_INFO, { userType, username, trueName, userId, phone, email });
           this.$emit("visibleChange");
         } else {
           this.$message.error('登录失败,请重新尝试');
