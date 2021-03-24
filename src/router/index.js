@@ -11,12 +11,22 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Home.vue"),
     children: [
       {
-        path: "",
-        name: "user-page",
-        component: () => import("../views/user/Index.vue"),
+        path: "user-info",
+        name: "user-info-page",
+        component: () => import("../views/user/UserInfo.vue"),
       },
       {
-        path: "equipment",
+        path: "update-secret",
+        name: "update-secret-page",
+        component: () => import("../views/user/UpdatePassword.vue"),
+      },
+      {
+        path: "option-log",
+        name: "option-log-page",
+        component: () => import("../views/user/UserInfo.vue"),
+      },
+      {
+        path: "",
         name: "equipment-page",
         component: () => import("../views/equipment/Index.vue"),
       },

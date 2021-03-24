@@ -25,6 +25,12 @@ export default {
       }); 
     },
 
+    getUserInfo() {
+      return getFetch({
+        url: "/users"
+      });
+    },
+
     post() {
       return postFetch({
         url: "/api/projects",

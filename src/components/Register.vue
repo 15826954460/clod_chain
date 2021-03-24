@@ -10,23 +10,31 @@
           <a-input
             v-decorator="[
               'username',
-              { rules: [{ required: true, message: '请输入用户名' }] },
+              {
+                initialValue: userInfo.username || '',
+                rules: [{ required: true, message: '请输入用户名' }],
+              },
             ]"
             placeholder="请输入用户名"
           />
         </a-form-item>
       </a-col>
+    </a-row>
+    <a-row :gutter="20">
       <a-col :span="12">
         <a-form-item
           label="密码"
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
-          extra="包含大小写字母、数字、特殊字符,长度>=6"
+          :extra="extra"
         >
           <a-input-password
             v-decorator="[
               'password',
-              { rules: [{ required: true, validator: this.passwordValidator }] },
+              {
+                initialValue: userInfo.password || '',
+                rules: [{ required: true, validator: this.passwordValidator }],
+              },
             ]"
             placeholder="请输入密码"
           />
@@ -43,12 +51,17 @@
           <a-input
             v-decorator="[
               'trueName',
-              { rules: [{ required: true, message: '请输入姓名' }] },
+              {
+                initialValue: userInfo.trueName || '',
+                rules: [{ required: true, message: '请输入姓名' }],
+              },
             ]"
             placeholder="请输入姓名"
           />
         </a-form-item>
       </a-col>
+    </a-row>
+    <a-row>
       <a-col :span="12">
         <a-form-item
           label="手机号"
@@ -58,14 +71,15 @@
           <a-input
             v-decorator="[
               'phone',
-              { 
+              {
+                initialValue: userInfo.trueName || '',
                 rules: [
-                  { 
+                  {
                     required: true,
                     message: '请输入有效手机号',
-                    pattern: /^1[34578]\d{9}$/
+                    pattern: /^1[34578]\d{9}$/,
                   },
-                ] 
+                ],
               },
             ]"
             placeholder="请输入手机号"
@@ -73,7 +87,33 @@
         </a-form-item>
       </a-col>
     </a-row>
-    <a-row :gutter="20">
+    <a-row>
+      <a-col :span="12">
+        <a-form-item
+          label="邮箱"
+          :label-col="formItemLayout.labelCol"
+          :wrapper-col="formItemLayout.wrapperCol"
+        >
+          <a-input
+            v-decorator="[
+              'email',
+              {
+                initialValue: userInfo.email || '',
+                rules: [
+                  {
+                    required: false,
+                    message: '邮箱格式无效',
+                    pattern: /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,
+                  },
+                ],
+              },
+            ]"
+            placeholder="请输入邮箱"
+          />
+        </a-form-item>
+      </a-col>
+    </a-row>
+    <!-- <a-row :gutter="20">
       <a-col :span="24">
         <a-form-item
           label="单位名称"
@@ -83,14 +123,17 @@
           <a-input
             v-decorator="[
               'company',
-              { rules: [{ required: true, message: '请输入单位名称' }] },
+              {
+                initialValue: userInfo.company || '',
+                rules: [{ required: true, message: '请输入单位名称' }],
+              },
             ]"
             placeholder="请输入单位名称"
           />
         </a-form-item>
       </a-col>
-    </a-row>
-    <a-row :gutter="20">
+    </a-row> -->
+    <!-- <a-row :gutter="20">
       <a-col :span="12">
         <a-form-item
           label="选择地址"
@@ -103,28 +146,16 @@
             @change="selAddrChange"
             v-decorator="[
               'area',
-              { rules: [{ required: true, message: '请选择地址' }] },
+              {
+                initialValue: userInfo.area || [],
+                rules: [{ required: true, message: '请选择地址' }],
+              },
             ]"
           />
         </a-form-item>
       </a-col>
-      <a-col :span="12">
-        <a-form-item
-          label="邮箱"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
-          <a-input
-            v-decorator="[
-              'email',
-              { rules: [{ required: false, message: '邮箱格式无效', pattern: /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/ }] },
-            ]"
-            placeholder="请输入邮箱"
-          />
-        </a-form-item>
-      </a-col>
-    </a-row>
-    <a-row :gutter="20">
+    </a-row> -->
+    <!-- <a-row :gutter="20">
       <a-col :span="24">
         <a-form-item
           label="详细地址"
@@ -134,18 +165,26 @@
           <a-textarea
             v-decorator="[
               'address',
-              { rules: [{ required: true, message: '请输入地址' }] },
+              {
+                initialValue: userInfo.address || '',
+                rules: [{ required: true, message: '请输入地址' }],
+              },
             ]"
             placeholder="请输入地址"
           />
         </a-form-item>
       </a-col>
+    </a-row> -->
+    <a-row :gutter="20">
+      <a-col :span="12">
+        <div class="__flex __rfec btn-wrapper">
+          <a-button style="margin-right: 20px" @click="cancelHandle"
+            >取消</a-button
+          >
+          <a-button type="primary" @click.self="sureHandle">确定</a-button>
+        </div>
+      </a-col>
     </a-row>
-
-    <div class="__flex __rfec btn-wrapper">
-      <a-button style="margin-right: 20px" @click="cancelHandle">取消</a-button>
-      <a-button type="primary" @click.self="sureHandle">确定</a-button>
-    </div>
   </a-form>
 </template>
 
@@ -160,31 +199,39 @@ const pwdRegex = new RegExp(
 
 const formItemLayout = {
   labelCol: { span: 6 },
-  wrapperCol: { span: 18 }
+  wrapperCol: { span: 18 },
 };
 
 const addressItemLayout = {
   labelCol: { span: 3 },
-  wrapperCol: { span: 21 }
+  wrapperCol: { span: 21 },
 };
 
 export default {
   name: "register-page",
+
+  props: {
+    extra: {
+      type: String,
+      default: "包含大小写字母、数字、特殊字符,长度>=6",
+    },
+    userInfo: {
+      type: Object,
+      default: () => {
+        return {
+        };
+      },
+    },
+  },
 
   data() {
     return {
       options: areaList,
       formItemLayout,
       addressItemLayout,
-      form: this.$form.createForm(this, { name: "normal_register" })
+      form: this.$form.createForm(this),
     };
   },
-
-  components: {},
-
-  created() {},
-
-  mounted() {},
 
   methods: {
     selAddrChange(value, selOptions) {
@@ -218,14 +265,13 @@ export default {
           console.log("Received values of form: ", values);
           return;
         }
-        const { area, address, ...options } = values;
+        const { area, address } = values;
         if (area[0] === area[1]) {
-          options.are = `${area[1]}市${area[2]}区${address}`;
+          values.detailAdress = `${area[1]}市${area[2]}区${address}`;
         } else {
-          options.are = `${area[0]}省${area[1]}市${area[2]}区${address}`;
+          values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
         }
-        console.log(111, options);
-        const { code, data } = await api.user.register(options);
+        const { code, data } = await api.user.register(values);
         if (code === 200) {
           this.$message.success("注册成功,即将跳转到登录页面", 2.5);
           let __timer = setTimeout(() => {
@@ -237,8 +283,8 @@ export default {
           this.$message.error("注册失败,请重新尝试");
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

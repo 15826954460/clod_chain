@@ -33,6 +33,14 @@
               <span slot="title"> <a-icon type="warning" />报警系统 </span>
               <a-menu-item key="/warnning">报警列表</a-menu-item>
             </a-sub-menu>
+            <a-sub-menu key="sub3">
+              <span slot="title">
+                <a-icon type="deployment-unit" />个人中心
+              </span>
+              <a-menu-item key="/user-info">个人信息</a-menu-item>
+              <a-menu-item key="/update-secret">修改密码</a-menu-item>
+              <a-menu-item key="/option-log">操作日志</a-menu-item>
+            </a-sub-menu>
           </a-menu>
         </a-layout-sider>
         <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">

@@ -6,7 +6,6 @@
     </p>
     <a-form-item>
       <a-input
-        size="large"
         v-decorator="[
           'username',
           { rules: [{ required: true, message: '请输入用户名' }] },
@@ -18,7 +17,6 @@
     </a-form-item>
     <a-form-item>
       <a-input
-        size="large"
         v-decorator="[
           'password',
           { rules: [{ required: true, message: '请输入正确格式密码' }] },
@@ -33,7 +31,7 @@
       style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 0"
     >
       <span class="register" @click="registerHander">注册账号</span>
-      <a-button type="primary" @click="handleSubmit">登陆</a-button>
+      <a-button type="primary" size="small" @click="handleSubmit">登陆</a-button>
     </div>
     <!-- 短信验证业务有待开发 TODO: -->
   </a-form>
