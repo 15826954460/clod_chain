@@ -28,3 +28,16 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 #### 业务需求
 - [x] 登录
 - [ ] 短信验证带开发
+
+### 测试账号、密码
+bys_001 bys_001
+
+### 参考第三方账号密码
+账号：experience 
+密码：123456
+链接：http://www.honeylinking.com/
+
+#### 权限说明
+userType 1: 超管 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户
+
+超级管理元账号: admin  123456

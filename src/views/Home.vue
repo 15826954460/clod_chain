@@ -3,25 +3,30 @@
     <LoginAndRegister v-show="!isLogined"></LoginAndRegister>
     <a-layout v-show="isLogined" class="components-layout-demo-top-side">
       <a-layout-header
-        style="background-color: rgba(0, 21, 41, 0.7); height: 40px; display: flex; flex-direction: row; justify-content: space-between; center; align-items: center; padding: 0 30px 0 50px;"
-      >
+        style="background-color: rgba(0, 21, 41, 0.7); height: 40px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0 30px 0 50px;">
         <div class="logo" />
-        <div class="__flex __rfsc userinfo-wrapper" @click="logoutHandle">
-          <a-icon type="user" style="margin-right: 5px; color: lightblue" />
-          <span class="user-name">{{ username }}</span>
-          <span class="login-out">退出</span>
-        </div>
+        <a-dropdown>
+          <p class="__flex __rcc user-name-wrapper" style="display: flex; padding: 0 10px; margin: 0; height: 40px;">
+            <span class="user-name">{{ username }}</span>
+            <a-icon type="down" />
+          </p>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <span>个人信息</span>
+            </a-menu-item>
+            <a-menu-item>
+              <span>修改密码</span>
+            </a-menu-item>
+            <a-menu-item @click.self="logoutHandle">
+              <span>退出登陆</span>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </a-layout-header>
       <a-layout style="background: #fff">
         <a-layout-sider width="200" style="background: #fff">
-          <a-menu
-            mode="inline"
-            :default-selected-keys="['1']"
-            :default-open-keys="['sub1']"
-            style="height: 100%; padding: 0; overflow-y: scroll"
-            theme="dark"
-            @click="handleMeunItem"
-          >
+          <a-menu mode="inline" :default-selected-keys="['1']" :default-open-keys="['sub1']"
+            style="height: 100%; padding: 0; overflow-y: scroll" theme="dark" @click="handleMeunItem">
             <a-menu-item key="/">首页</a-menu-item>
             <a-sub-menu key="sub1">
               <span slot="title">
@@ -30,7 +35,8 @@
               <a-menu-item key="/equipment">设备列表</a-menu-item>
             </a-sub-menu>
             <a-sub-menu key="sub2">
-              <span slot="title"> <a-icon type="warning" />报警系统 </span>
+              <span slot="title">
+                <a-icon type="warning" />报警系统 </span>
               <a-menu-item key="/warnning">报警列表</a-menu-item>
             </a-sub-menu>
             <a-sub-menu key="sub3">
@@ -47,8 +53,7 @@
           <router-view></router-view>
         </a-layout-content>
       </a-layout>
-      <a-layout-footer
-        style="
+      <a-layout-footer style="
           text-align: center;
           height: 40px;
           padding: 0;
@@ -56,95 +61,95 @@
           flex-direction: row;
           align-items: center;
           justify-content: center;
-        "
-        >{{ $t("footer.icp") }}</a-layout-footer
-      >
+        ">{{ $t("footer.icp") }}</a-layout-footer>
     </a-layout>
   </div>
 </template>
 
 <script>
-import sessionStorage from "@/utils/session-storage";
-import { TOKEN, USER_INFO } from "@/constant";
+  import sessionStorage from "@/utils/session-storage";
+  import { TOKEN, USER_INFO } from "@/constant";
 
-import { mapState, createNamespacedHelpers, mapMutations } from "vuex";
-const {
-  mapState: mapStateUser,
-  mapMutations: mapMutationsUser,
-} = createNamespacedHelpers("user");
+  import { mapState, createNamespacedHelpers, mapMutations } from "vuex";
+  const {
+    mapState: mapStateUser,
+    mapMutations: mapMutationsUser,
+  } = createNamespacedHelpers("user");
 
-import LoginAndRegister from "@/components/LoginAndRegister.vue";
+  import LoginAndRegister from "@/components/LoginAndRegister.vue";
 
-export default {
-  name: "app-home",
+  export default {
+    name: "app-home",
 
-  data() {
-    return {};
-  },
-
-  components: {
-    LoginAndRegister,
-  },
-
-  computed: {
-    ...mapState({
-      isLogined: (state) => state.isLogined,
-    }),
-    ...mapStateUser({
-      username: (state) => state.userInfo.username,
-    }),
-  },
-
-  created() {
-    const token = sessionStorage.get(TOKEN);
-    const userInfo = sessionStorage.get(USER_INFO);
-    this.updateLogin(token ? true : false);
-    this.updateUserInfo(userInfo ? userInfo : {});
-  },
-
-  methods: {
-    ...mapMutations(["updateLogin", "updateToken"]),
-    ...mapMutationsUser(["updateUserInfo", "clearUpdateInfo"]),
-
-    handleMeunItem({ keyPath, key }) {
-      console.log(keyPath, key);
-      this.$router.push({ path: `${key}` });
+    data() {
+      return {
+      };
     },
 
-    logoutHandle() {
-      this.clearUpdateInfo();
-      this.updateLogin(false);
-      this.updateToken();
-      sessionStorage.clear();
-    }
-  },
-};
+    components: {
+      LoginAndRegister,
+    },
+
+    computed: {
+      ...mapState({
+        isLogined: (state) => state.isLogined,
+      }),
+      ...mapStateUser({
+        username: (state) => state.userInfo.username,
+      }),
+    },
+
+    created() {
+      const token = sessionStorage.get(TOKEN);
+      const userInfo = sessionStorage.get(USER_INFO);
+      this.updateLogin(token ? true : false);
+      this.updateUserInfo(userInfo ? userInfo : {});
+    },
+
+    methods: {
+      ...mapMutations(["updateLogin", "updateToken"]),
+      ...mapMutationsUser(["updateUserInfo", "clearUpdateInfo"]),
+
+      handleMeunItem({ keyPath, key }) {
+        console.log(keyPath, key);
+        this.$router.push({ path: `${key}` });
+      },
+
+      logoutHandle() {
+        this.clearUpdateInfo();
+        this.updateLogin(false);
+        this.updateToken();
+        sessionStorage.clear();
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>
-.components-layout-demo-top-side {
-  height: 100vh;
-  width: 100vw;
-}
-.logo {
-  display: inline-block;
-  width: 120px;
-  height: 30px;
-  background: rgba(255, 255, 255, 0.2);
-}
-.userinfo-wrapper {
-  height: 40px;
-  padding: 0 10px;
-  font-size: 16px;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+  .components-layout-demo-top-side {
+    height: 100vh;
+    width: 100vw;
   }
-  .login-out {
-    margin-left: 5px;
-    font-size: 12px;
+
+  .logo {
+    display: inline-block;
+    width: 120px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
   }
-}
+
+  .user-name-wrapper {
+    font-size: 16px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .user-name {
+      margin-right: 5px;
+    }
+  }
 </style>
