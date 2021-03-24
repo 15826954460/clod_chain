@@ -28,17 +28,41 @@ let customAxios = axios.create({
   responseType: 'json', // 默认的相应数据格式
 })
 
+/** formdata */
+function __createFormData(params = {}) {
+  const formData = new FormData();
+  Object.keys(params).forEach((key) => {
+    if (params[key]) {
+      formData.append(key, params[key])
+    }
+  });
+  return formData;
+}
+
 /** 添加请求拦截器，eg: 做一些初始化的参数过滤和验证等等 */
 let _requestInstance = customAxios.interceptors.request.use(
   config => {
     /** 根据实际业务写逻辑 */
-    const { headers } = config;
-    return {
-      ...config, headers: {
-        ...headers,
-        toekn: store.state.user.token
+    const { headers, method, data, params } = config;
+    if (method.toUpperCase() === "POST") {
+      return {
+        ...config,
+        data: __createFormData(data),
+        headers: {
+          ...headers,
+          toekn: store.state.user.token
+        }
       }
-    };
+    } else {
+      return {
+        ...config,
+        params: __createFormData(params),
+        headers: {
+          ...headers,
+          toekn: store.state.user.token
+        }
+      }
+    }
   },
   error => {
     return Promise.reject(error);

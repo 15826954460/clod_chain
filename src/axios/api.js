@@ -6,16 +6,6 @@
 
 import { getFetch, postFetch, uploadFile } from "./axios";
 
-function __createFormData(params = {}) {
-  const formData = new FormData();
-  Object.keys(params).forEach((key) => {
-    if (params[key]) {
-      formData.append(key, params[key])
-    }
-  });
-  return formData;
-}
-
 export default {
   /** 用户模块 */
   user: {
@@ -23,7 +13,7 @@ export default {
       return postFetch({
         url: "/users/user_login",
         interfaceKey: "login",
-        params: __createFormData(params),
+        params,
       });
     },
 
@@ -31,7 +21,7 @@ export default {
       return postFetch({
         url: "/users/register",
         interfaceKey: "register",
-        params: __createFormData(params),
+        params,
       }); 
     },
 
