@@ -7,6 +7,7 @@
 const state = {
   isNetError: false,
   isLogined: false,
+  token: '',
 };
 
 const mutations = {
@@ -17,6 +18,10 @@ const mutations = {
 
   updateLogin(state, bool) {
     state.isLogined = bool;
+  },
+  
+  updateToken(state, token = "") {
+    state.token = token;
   }
 };
 

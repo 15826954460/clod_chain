@@ -5,16 +5,23 @@
  */
 
 const state = {
-  userType: 0, // 1: 超管 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户
-  token: '',
+  userInfo: {
+    userType: 0, // 1: 超管 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户
+    username: '',
+  },
 };
 
 const mutations = {
-  updateUserType(state, num) {
-    state.userType = num;
+  updateUserInfo(state, userinfo) {
+    const { userInfo } = state;
+    state.userInfo = {
+      ...userInfo,
+      ...userinfo
+    }
   },
-  updateToken(state, token) {
-    state.token = token;
+
+  clearUpdateInfo() {
+    state.userInfo = {};
   }
 };
 

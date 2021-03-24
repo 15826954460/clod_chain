@@ -1,12 +1,16 @@
 <template>
   <div>
     <LoginAndRegister v-show="!isLogined"></LoginAndRegister>
-    <a-layout v-show="isLogined" id="components-layout-demo-top-side">
+    <a-layout v-show="isLogined" class="components-layout-demo-top-side">
       <a-layout-header
-        style="background-color: rgba(0, 21, 41, 0.7); height: 60px; display: flex; flex-direction: row; justify-content: space-between; center; align-items: center; padding: 0 30px 0 50px"
+        style="background-color: rgba(0, 21, 41, 0.7); height: 40px; display: flex; flex-direction: row; justify-content: space-between; center; align-items: center; padding: 0 30px 0 50px;"
       >
         <div class="logo" />
-        <span class="__ellip user-name">用户名</span>
+        <div class="__flex __rfsc userinfo-wrapper" @click="logoutHandle">
+          <a-icon type="user" style="margin-right: 5px; color: lightblue" />
+          <span class="user-name">{{ username }}</span>
+          <span class="login-out">退出</span>
+        </div>
       </a-layout-header>
       <a-layout style="background: #fff">
         <a-layout-sider width="200" style="background: #fff">
@@ -26,9 +30,7 @@
               <a-menu-item key="/equipment">设备列表</a-menu-item>
             </a-sub-menu>
             <a-sub-menu key="sub2">
-              <span slot="title">
-                <a-icon type="warning" />报警系统
-              </span>
+              <span slot="title"> <a-icon type="warning" />报警系统 </span>
               <a-menu-item key="/warnning">报警列表</a-menu-item>
             </a-sub-menu>
           </a-menu>
@@ -38,45 +40,81 @@
         </a-layout-content>
       </a-layout>
       <a-layout-footer
-        style="text-align: center; height: 60px; padding: 0; display: flex; flex-direction: row; align-items: center; justify-content: center"
-      >{{ $t("footer.icp") }}</a-layout-footer>
+        style="
+          text-align: center;
+          height: 40px;
+          padding: 0;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+        "
+        >{{ $t("footer.icp") }}</a-layout-footer
+      >
     </a-layout>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import sessionStorage from "@/utils/session-storage";
+import { TOKEN, USER_INFO } from "@/constant";
+
+import { mapState, createNamespacedHelpers, mapMutations } from "vuex";
+const {
+  mapState: mapStateUser,
+  mapMutations: mapMutationsUser,
+} = createNamespacedHelpers("user");
+
 import LoginAndRegister from "@/components/LoginAndRegister.vue";
 
 export default {
   name: "app-home",
 
   data() {
-    return {
-    };
+    return {};
   },
 
   components: {
-    LoginAndRegister
+    LoginAndRegister,
   },
 
   computed: {
     ...mapState({
-      isLogined: state => state.isLogined,
+      isLogined: (state) => state.isLogined,
+    }),
+    ...mapStateUser({
+      username: (state) => state.userInfo.username,
     }),
   },
 
+  created() {
+    const token = sessionStorage.get(TOKEN);
+    const userInfo = sessionStorage.get(USER_INFO);
+    this.updateLogin(token ? true : false);
+    this.updateUserInfo(userInfo ? userInfo : {});
+  },
+
   methods: {
+    ...mapMutations(["updateLogin", "updateToken"]),
+    ...mapMutationsUser(["updateUserInfo", "clearUpdateInfo"]),
+
     handleMeunItem({ keyPath, key }) {
       console.log(keyPath, key);
       this.$router.push({ path: `${key}` });
+    },
+
+    logoutHandle() {
+      this.clearUpdateInfo();
+      this.updateLogin(false);
+      this.updateToken();
+      sessionStorage.clear();
     }
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-#components-layout-demo-top-side {
+.components-layout-demo-top-side {
   height: 100vh;
   width: 100vw;
 }
@@ -86,19 +124,19 @@ export default {
   height: 30px;
   background: rgba(255, 255, 255, 0.2);
 }
-.user-name {
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  padding: 0 2px;
+.userinfo-wrapper {
+  height: 40px;
+  padding: 0 10px;
   font-size: 16px;
-  font-weight: 600px;
-  border-radius: 50%;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
   &:hover {
-    cursor: pointer;
     background-color: rgba(0, 0, 0, 0.3);
+  }
+  .login-out {
+    margin-left: 5px;
+    font-size: 12px;
   }
 }
 </style>

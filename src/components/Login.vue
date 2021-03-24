@@ -41,9 +41,11 @@
 
 <script>
 import api from "@/axios/api";
+import sessionStorage from "@/utils/session-storage";
+import { TOKEN, USER_INFO } from "@/constant"
+
 import { mapMutations, createNamespacedHelpers } from "vuex";
 const {
-  mapState: mapStateUser,
   mapMutations: mapMutationsUser
 } = createNamespacedHelpers("user");
 
@@ -54,8 +56,6 @@ export default {
     return {};
   },
 
-  components: {},
-
   beforeCreate() {
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
@@ -63,8 +63,8 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapMutations(['updateLogin']),
-    ...mapMutationsUser(['updateUserType', 'updateToken']),
+    ...mapMutations(['updateLogin', 'updateToken']),
+    ...mapMutationsUser(['updateUserInfo']),
 
     handleSubmit(e) {
       e.preventDefault();
@@ -73,12 +73,14 @@ export default {
           console.log("Received values of form: ", values);
           return;
         }
-        const { code, data: { userType, token } } = await api.user.login(values);
+        const { code, data: { userType, token, username } } = await api.user.login(values);
         // 接口请求
         if (code === 200) {
-          this.updateUserType(userType);
+          this.updateUserInfo({ userType, username });
           this.updateToken(token);
           this.updateLogin(true);
+          sessionStorage.set(TOKEN, token);
+          sessionStorage.set(USER_INFO, { userType, username });
           this.$emit("visibleChange");
         } else {
           this.$message.error('登录失败,请重新尝试');
