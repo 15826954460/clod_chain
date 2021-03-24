@@ -7,6 +7,7 @@
         <div class="logo" />
         <a-dropdown>
           <p class="__flex __rcc user-name-wrapper" style="display: flex; padding: 0 10px; margin: 0; height: 40px;">
+            <a-icon type="user" style="color: lightblue; margin-right: 8px" />
             <span class="user-name">{{ username }}</span>
             <a-icon type="down" />
           </p>
