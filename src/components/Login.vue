@@ -79,6 +79,8 @@ export default {
           this.updateLogin(true);
           sessionStorage.set(TOKEN, token);
           sessionStorage.set(USER_INFO, { userType, username, trueName, userId, phone, email });
+        } else if (code === 10038) {
+          this.$message.error('用户名不存在');
         } else {
           this.$message.error('登录失败,请重新尝试');
         }

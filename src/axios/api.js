@@ -44,7 +44,7 @@ export default {
 
     updatePassword(params) {
       return postFetch({
-        url: "/update_password",
+        url: "/users/update_password",
         interfaceKey: "updatePassword",
         params,
         method: 'PUT',

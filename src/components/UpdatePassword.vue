@@ -108,6 +108,7 @@ export default {
             this.updateToken();
             sessionStorage.clear();
             clearTimeout(__timer);
+            this.$emit("cancel", false);
             __timer = null;
           }, 1000);
         } else {
