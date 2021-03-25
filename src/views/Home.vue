@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LoginAndRegister v-show="!isLogined"></LoginAndRegister>
+    <LoginAndRegister v-if="!isLogined"></LoginAndRegister>
     <a-layout v-show="isLogined" class="components-layout-demo-top-side">
       <a-layout-header
         style="background-color: rgba(0, 21, 41, 0.7); height: 40px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0 30px 0 50px;">
@@ -64,6 +64,7 @@
           justify-content: center;
         ">{{ $t("footer.icp") }}</a-layout-footer>
     </a-layout>
+    <CusModule></CusModule>
   </div>
 </template>
 
@@ -78,6 +79,7 @@
   } = createNamespacedHelpers("user");
 
   import LoginAndRegister from "@/components/LoginAndRegister.vue";
+  import CusModule from "@/components/CusModule.vue";
 
   export default {
     name: "app-home",
@@ -88,7 +90,7 @@
     },
 
     components: {
-      LoginAndRegister,
+      LoginAndRegister, CusModule
     },
 
     computed: {

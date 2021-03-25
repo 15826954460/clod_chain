@@ -27,7 +27,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 #### 业务需求
 - [x] 登录
+- [x] 注册
+- [x] 退出登录
 - [ ] 短信验证带开发
+- [ ] 用户信息加密到session
 
 ### 测试账号、密码
 bys_001 bys_001
