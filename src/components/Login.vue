@@ -48,7 +48,7 @@ const {
 } = createNamespacedHelpers("user");
 
 export default {
-  name: "login-page",
+  name: "login-com",
 
   data() {
     return {};
@@ -79,7 +79,6 @@ export default {
           this.updateLogin(true);
           sessionStorage.set(TOKEN, token);
           sessionStorage.set(USER_INFO, { userType, username, trueName, userId, phone, email });
-          this.$emit("visibleChange");
         } else {
           this.$message.error('登录失败,请重新尝试');
         }

@@ -40,6 +40,15 @@ export default {
         params,
         method: 'PUT',
       });
+    },
+
+    updatePassword(params) {
+      return postFetch({
+        url: "/update_password",
+        interfaceKey: "updatePassword",
+        params,
+        method: 'PUT',
+      })
     }
   },
 };

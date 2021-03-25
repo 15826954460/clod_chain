@@ -3,15 +3,16 @@
  * @date 2021-03-10 20:05:19
  * @description 模块管理
  */
+import api from "@/axios/api";
 
 const state = {
   userInfo: {
     userType: 0, // 1: 超管 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户
-    username: '',
+    username: "",
     phone: null,
-    tureName: '',
-    userId: '',
-    email: '',
+    tureName: "",
+    userId: "",
+    email: "",
   },
 };
 
@@ -20,18 +21,28 @@ const mutations = {
     const { userInfo } = state;
     state.userInfo = {
       ...userInfo,
-      ...userinfo
-    }
+      ...userinfo,
+    };
   },
 
   clearUpdateInfo() {
     state.userInfo = {};
-  }
+  },
 };
 
+const actions = {
+  getUserInfo: async ({ commit, state, rootState }, params) => {
+    const { code, data } = await api.user.getUserInfo(params);
+    if (code === 200) {
+      commit('updateUserInfo', data);
+    }
+    return { code, data };
+  },
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
+  actions,
 };

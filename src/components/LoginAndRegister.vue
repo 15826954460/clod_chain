@@ -8,14 +8,13 @@
     :footer="null"
     :maskStyle="maskStyle"
     :bodyStyle="{ ...bodyStyle, padding: isShowLogin ? '40px' : '20px' }"
-    :width="isShowLogin ? 450 : 800"
+    :width="isShowLogin ? 450 : 520"
   >
     <Login
       v-if="isShowLogin"
       @loginRegisterSwitch="loginRegisterSwitch"
-      @visibleChange="visibleChange"
     ></Login>
-    <Register v-else @loginRegisterSwitch="loginRegisterSwitch" @visibleChange="visibleChange"></Register>
+    <Register v-else @loginRegisterSwitch="loginRegisterSwitch" @cancel="loginRegisterSwitch"></Register>
   </a-modal>
 </template>
 
@@ -24,9 +23,13 @@ import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 
 export default {
-  name: "login-and-register",
+  name: "login-and-register-com",
 
   props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
     isShowClose: {
       type: Boolean,
       default: false
@@ -55,7 +58,6 @@ export default {
 
   data() {
     return {
-      visible: true,
       isShowLogin: true
     };
   },
@@ -72,8 +74,8 @@ export default {
       this.isShowLogin = bool;
     },
 
-    visibleChange(bool = false) {
-      this.visible = bool;
+    visibleChange(bool) {
+      this.$emit('changeLoginAndRegisterShow', bool);
     }
   }
 };

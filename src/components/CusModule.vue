@@ -3,12 +3,10 @@
     <a-modal
       :title="title"
       :visible="visible"
-      :okText="okText"
-      :cancelText="cancelText"
       :centered="isCenter"
       :closable="isShowClose"
       :maskClosable="false"
-      @ok="handleOk"
+      :footer="null"
       @cancel="handleCancel"
       :id="isShowFooterBorder ? '' : 'border-none'"
     >
@@ -28,7 +26,7 @@ export default {
     },
     visible: {
       type: Boolean,
-      default: false
+      default: true
     },
     isCenter: {
       type: Boolean,
@@ -48,29 +46,9 @@ export default {
     }
   },
 
-  data() {
-    return {
-      okText: "确认",
-      cancelText: "取消"
-    };
-  },
-
-  computed: {
-  },
-
-  components: {},
-
-  created() {},
-
-  mounted() {},
-
   methods: {
-    handleOk() {
-      this.$emit("ok");
-    },
-
     handleCancel() {
-      this.$emit("cancel");
+      this.$emit("cancel", false);
     }
   }
 };

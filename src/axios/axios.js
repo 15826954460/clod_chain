@@ -23,10 +23,8 @@ let customAxios = axios.create({
   headers: {
     // 'Content-Type': 'application/json; charset=UTF-8',
     "Content-Type": "multipart/form-data",
-    Authorization: '' // 权限鉴别字段默认为空
   },
   withCredentials: true, // 请求凭证
-  auth: {}, // 使用自定义的验签头
   responseType: 'json', // 默认的相应数据格式
 })
 
@@ -52,7 +50,7 @@ let _requestInstance = customAxios.interceptors.request.use(
         data: __createFormData(data),
         headers: {
           ...headers,
-          toekn: store.state.user.token || sessionStorage.get(TOKEN),
+          Authorization: store.state.user.token || sessionStorage.get(TOKEN),
         }
       }
     } else {
@@ -61,7 +59,7 @@ let _requestInstance = customAxios.interceptors.request.use(
         // params: __createFormData(params),
         headers: {
           ...headers,
-          toekn: store.state.user.token || sessionStorage.get(TOKEN),
+          Authorization: store.state.user.token || sessionStorage.get(TOKEN),
         }
       }
     }
