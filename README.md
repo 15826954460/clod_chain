@@ -29,6 +29,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] 登录
 - [x] 注册
 - [x] 退出登录
+- [x] 修改密码
+- [x] 修改用户信息
 - [ ] 短信验证带开发
 - [ ] 用户信息加密到session
 
