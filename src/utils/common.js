@@ -5,6 +5,8 @@
  */
 
 class Common {
+  constructor() {}
+
   getQueryString(name, url) {
     const pattern = new RegExp(`[\\?&#]${name}=([^&#]+)`, "gi");
     const ma = (url || location.search).match(pattern);

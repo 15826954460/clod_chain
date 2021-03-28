@@ -17,7 +17,7 @@
       />
     </a-form-item>
     <a-form-item
-      v-if="!isUpdate"
+      v-if="!isEdit"
       label="密码"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
@@ -94,6 +94,27 @@
         placeholder="请输入邮箱"
       />
     </a-form-item>
+    <a-form-item
+      label="角色"
+      :label-col="formItemLayout.labelCol"
+      :wrapper-col="formItemLayout.wrapperCol"
+      >
+      <SelectUserType
+        v-decorator="[
+          'userType',
+          {
+            initialValue: userInfo.userType || 0,
+          },
+        ]"
+        @change="handleTypeSelectChange"
+      ></SelectUserType>
+    </a-form-item>
+    <!-- <a-form-item
+      label="单位"
+      :label-col="formItemLayout.labelCol"
+      :wrapper-col="formItemLayout.wrapperCol"
+    >
+    </a-form-item> -->
     <!-- 
         <a-form-item
           label="单位名称"
@@ -159,6 +180,7 @@
 <script>
 import { areaList } from "@/constant/province-data";
 import api from "@/axios/api";
+import SelectUserType from "@/components/common/SelectType.vue";
 
 import { createNamespacedHelpers } from "vuex";
 const {
@@ -184,6 +206,10 @@ const addressItemLayout = {
 export default {
   name: "register-com",
 
+  components: {
+    SelectUserType,
+  },
+
   props: {
     extra: {
       type: String,
@@ -195,7 +221,11 @@ export default {
         return {};
       },
     },
-    isUpdate: {
+    isEdit: {
+      type: Boolean,
+      default: false,
+    },
+    isEditOther: {
       type: Boolean,
       default: false,
     },
@@ -240,7 +270,7 @@ export default {
 
     cancelHandle() {
       this.form.resetFields();
-      this.$emit("cancel", this.isUpdate ? false : true);
+      this.$emit("cancel", this.isEdit ? false : true);
     },
 
     submit(e) {
@@ -256,11 +286,17 @@ export default {
         // } else {
         //   values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
         // }
-        if (this.isUpdate) {
-          this.updateUserInfo({ ...values, id: this.userId });
-        } else {
-          this.register(values);
+        // 修改其它用户信息
+        if (this.isEditOther) {
+          this.updateOther(values);
+          return;
         }
+        // 修改当前用户信息
+        if (this.isEdit) {
+          this.updateSelf({ ...values, id: this.userId });
+          return;
+        }
+        this.register(values);
       });
     },
 
@@ -281,14 +317,13 @@ export default {
       }
     },
 
-    async updateUserInfo(values) {
+    async updateSelf(values) {
       const { code } = await api.user.updateUserInfo(values);
       if (code === 200) {
         // 待处理
         const { code } = await this.updateUserInfoAct({
           id: this.userId,
         });
-        console.log("updateUserInfo====", code);
         if (code === 200) {
           this.$message.success("修改用户信息成功", 1.0);
           let __timer = setTimeout(() => {
@@ -298,13 +333,27 @@ export default {
           }, 1000);
         }
         // 跟新本地的
+      } else if (code === 10036) {
+        this.$message.error("手机号已存在");
       } else {
         this.$message.error("修改用户信息,请重新尝试");
       }
     },
+
+    async updateOther(values) {
+      const { id } = this.userInfo;
+      const { code } = await api.user.updateUserInfo({ ...values, id });
+      if (code === 200) {
+        this.$emit("cancel", false);
+        this.$emit("updateList");
+      }
+    },
+
+    handleTypeSelectChange(value) {
+      this.form.setFieldsValue({
+        userType: value,
+      });
+    },
   },
 };
 </script>
-
-<style lang='scss' scoped>
-</style>
