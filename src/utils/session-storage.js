@@ -5,24 +5,24 @@
  */
 
 /** 默认缓存半小时 */
-import { CRYPTO_KEY } from "@/constant";
-import CryptoJS from "crypto-js";
+// import { CRYPTO_KEY } from "@/constant";
+// import CryptoJS from "crypto-js";
 
-function encrypt(val) {
-  const aesVal = CryptoJS.AES.encrypt(
-    JSON.stringify(val),
-    CRYPTO_KEY
-  ).toString();
-  console.log("-------encrypt----", aesVal);
-  return aesVal;
-}
+// function encrypt(val) {
+//   const aesVal = CryptoJS.AES.encrypt(
+//     JSON.stringify(val),
+//     CRYPTO_KEY
+//   ).toString();
+//   console.log("-------encrypt----", aesVal);
+//   return aesVal;
+// }
 
-function decrypt(val) {
-  const bytes = CryptoJS.AES.decrypt(val, CRYPTO_KEY);
-  const aesVal = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-  console.log("-------decrypt----", aesVal);
-  return aesVal;
-}
+// function decrypt(val) {
+//   const bytes = CryptoJS.AES.decrypt(val, CRYPTO_KEY);
+//   const aesVal = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+//   console.log("-------decrypt----", aesVal);
+//   return aesVal;
+// }
 
 export default {
   set(key, data, expired = 30) {

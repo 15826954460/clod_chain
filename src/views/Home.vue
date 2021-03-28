@@ -66,9 +66,12 @@
                 <a-icon type="usergroup-add" />用户中心
               </span>
               <a-menu-item key="/user-list">用户列表</a-menu-item>
-              <!-- <a-menu-item key="/update-secret">单位管理员</a-menu-item>
-              <a-menu-item key="/option-log">普通用户</a-menu-item>
-              <a-menu-item key="/option-log">代理用户</a-menu-item> -->
+            </a-sub-menu>
+            <a-sub-menu key="sub4">
+              <span slot="title">
+                <a-icon type="block" />配置
+              </span>
+              <a-menu-item key="/company" v-if="userType !== 4">单位管理</a-menu-item>
             </a-sub-menu>
           </a-menu>
         </a-layout-sider>
@@ -152,6 +155,7 @@ export default {
     ...mapStateUser({
       username: (state) => state.userInfo.username,
       userInfo: (state) => state.userInfo,
+      userType: (state) => state.userInfo.userType,
     }),
   },
 
