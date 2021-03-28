@@ -95,6 +95,10 @@ export default {
           this.$message.error("两次密码输入不一致");
           return;
         }
+        if (newPassword.trim() === password.trim()) {
+          this.$message.error("原密码和新密码不能重复");
+          return;
+        }
         const { code } = await api.user.updatePassword({
           newPassword,
           oldPassword: password,
@@ -111,6 +115,8 @@ export default {
             this.$emit("cancel", false);
             __timer = null;
           }, 1000);
+        } else if (code === 10002) {
+          this.$message.error("旧密码错误，请重新输入");
         } else {
           this.$message.error("修改密码失败，请稍后再试");
         }

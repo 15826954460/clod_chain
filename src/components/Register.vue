@@ -217,7 +217,7 @@ export default {
   },
 
   methods: {
-    ...mapActionsUser(["getUserInfo"]),
+    ...mapActionsUser(["updateUserInfoAct"]),
 
     // selAddrChange(value, selOptions) {
     //   console.log(1111, value, selOptions);
@@ -284,14 +284,18 @@ export default {
     async updateUserInfo(values) {
       const { code } = await api.user.updateUserInfo(values);
       if (code === 200) {
-        console.log("--------updateUserInfo", this.isUpdate);
         // 待处理
-        const { code, data } = this.$store.dispatch("getUserInfo", {
+        const { code } = await this.updateUserInfoAct({
           id: this.userId,
         });
-        console.log(11111, data);
-        if (code === 0) {
-          this.$message.success("修改用户信息成功");
+        console.log("updateUserInfo====", code);
+        if (code === 200) {
+          this.$message.success("修改用户信息成功", 1.0);
+          let __timer = setTimeout(() => {
+            this.$emit("cancel", false);
+            clearTimeout(__timer);
+            __timer = null;
+          }, 1000);
         }
         // 跟新本地的
       } else {

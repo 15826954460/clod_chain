@@ -22,6 +22,12 @@ npm run lint
 | markdown | 编辑markdown文档 |
 | desc     | 添加描述 |
 
+#### 状态码说明
+| code | 备注 |
+|:-------- |:---- |
+| 10002     | 旧密码错误|
+| 10036      | 手机号已存在|
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 

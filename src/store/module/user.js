@@ -18,6 +18,7 @@ const state = {
 
 const mutations = {
   updateUserInfo(state, userinfo) {
+    console.log(222, userinfo);
     const { userInfo } = state;
     state.userInfo = {
       ...userInfo,
@@ -31,7 +32,7 @@ const mutations = {
 };
 
 const actions = {
-  getUserInfo: async ({ commit, state, rootState }, params) => {
+  updateUserInfoAct: async ({ commit, state, rootState }, params) => {
     const { code, data } = await api.user.getUserInfo(params);
     if (code === 200) {
       commit('updateUserInfo', data);
