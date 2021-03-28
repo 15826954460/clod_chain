@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Login from "@/components/Login.vue";
-import Register from "@/components/Register.vue";
+import Login from "@/components/common/Login.vue";
+import Register from "@/components/common/Register.vue";
 
 export default {
   name: "login-and-register-com",

@@ -11,9 +11,9 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Home.vue"),
     children: [
       {
-        path: "user-info",
-        name: "user-info-page",
-        component: () => import("../views/user/UserInfo.vue"),
+        path: "user-list",
+        name: "user-list-page",
+        component: () => import("../views/user/UserList.vue"),
       },
       {
         path: "update-secret",
@@ -23,7 +23,7 @@ const routes = [
       {
         path: "option-log",
         name: "option-log-page",
-        component: () => import("../views/user/UserInfo.vue"),
+        component: () => import("../views/user/OptionLog.vue"),
       },
       {
         path: "",

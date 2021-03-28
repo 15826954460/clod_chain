@@ -102,7 +102,7 @@ export default {
     width: 80px;
     height: 40px;
     margin-right: 10px;
-    background-image: url("../assets/image/logo.jpeg");
+    background-image: url("../../assets/image/logo.jpeg");
   }
 }
 

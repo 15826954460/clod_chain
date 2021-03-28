@@ -18,7 +18,6 @@ const state = {
 
 const mutations = {
   updateUserInfo(state, userinfo) {
-    console.log(222, userinfo);
     const { userInfo } = state;
     state.userInfo = {
       ...userInfo,

@@ -63,11 +63,12 @@
             </a-sub-menu>
             <a-sub-menu key="sub3">
               <span slot="title">
-                <a-icon type="deployment-unit" />个人中心
+                <a-icon type="usergroup-add" />用户中心
               </span>
-              <a-menu-item key="/user-info">个人信息</a-menu-item>
-              <a-menu-item key="/update-secret">修改密码</a-menu-item>
-              <a-menu-item key="/option-log">操作日志</a-menu-item>
+              <a-menu-item key="/user-list">用户列表</a-menu-item>
+              <!-- <a-menu-item key="/update-secret">单位管理员</a-menu-item>
+              <a-menu-item key="/option-log">普通用户</a-menu-item>
+              <a-menu-item key="/option-log">代理用户</a-menu-item> -->
             </a-sub-menu>
           </a-menu>
         </a-layout-sider>
@@ -121,10 +122,10 @@ const {
   mapMutations: mapMutationsUser,
 } = createNamespacedHelpers("user");
 
-import LoginAndRegister from "@/components/LoginAndRegister.vue";
-import CusModule from "@/components/CusModule.vue";
-import Register from "@/components/Register.vue";
-import UpdatePassword from "@/components/UpdatePassword.vue";
+import LoginAndRegister from "@/components/common/LoginAndRegister.vue";
+import CusModule from "@/components/common/CusModule.vue";
+import Register from "@/components/common/Register.vue";
+import UpdatePassword from "@/components/common/UpdatePassword.vue";
 
 export default {
   name: "app-home",

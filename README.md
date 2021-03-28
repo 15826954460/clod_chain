@@ -40,6 +40,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [ ] 短信验证带开发
 - [ ] 用户信息加密到session
 
+#### 菜单角色相关的接口用不上
+
 ### 测试账号、密码
 bys_001 bys_001
 
