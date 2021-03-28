@@ -27,6 +27,16 @@ export default {
       });
     },
 
+    // ------ 添加用户
+    addUser(params) {
+      return postFetch({
+        url: "/users",
+        interfaceKey: "addUser",
+        params,
+        method: "PUT",
+      });
+    },
+
     // -------获取用户信息
     getUserInfo(params) {
       return getFetch({

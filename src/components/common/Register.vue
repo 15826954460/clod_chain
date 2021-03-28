@@ -286,17 +286,19 @@ export default {
         // } else {
         //   values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
         // }
-        // 修改其它用户信息
-        if (this.isEditOther) {
-          this.updateOther(values);
-          return;
-        }
-        // 修改当前用户信息
-        if (this.isEdit) {
-          this.updateSelf({ ...values, id: this.userId });
-          return;
-        }
-        this.register(values);
+        console.log('------------', values);
+        return;
+        // // 修改其它用户信息
+        // if (this.isEditOther) {
+        //   this.updateOther(values);
+        //   return;
+        // }
+        // // 修改当前用户信息
+        // if (this.isEdit) {
+        //   this.updateSelf({ ...values, id: this.userId });
+        //   return;
+        // }
+        // this.register(values);
       });
     },
 
@@ -342,7 +344,15 @@ export default {
 
     async updateOther(values) {
       const { id } = this.userInfo;
-      const { code } = await api.user.updateUserInfo({ ...values, id });
+      let res;
+      if (id) {
+        // 修改
+        res = await api.user.updateUserInfo({ ...values, id });
+      } else {
+        // 新增
+        res = await api.user.addUser({ ...values, id });
+      }
+      const { code } = res;
       if (code === 200) {
         this.$emit("cancel", false);
         this.$emit("updateList");
