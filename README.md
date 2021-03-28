@@ -37,8 +37,13 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] 退出登录
 - [x] 修改密码
 - [x] 修改用户信息
+- [x] 获取用户列表
+- [x] 删除用户
+- [x] 修改用户信息(用户信息/角色)
+- [ ] 添加用户
+- [x] 获取单位列表
 - [ ] 短信验证带开发
-- [ ] 用户信息加密到session
+- [ ] 用户信息加密到session-storage
 
 #### 菜单角色相关的接口用不上
 
@@ -50,7 +55,21 @@ bys_001 bys_001
 密码：123456
 链接：http://www.honeylinking.com/
 
+### 待解决错误
+Loading chunk 0 failed.
+
 #### 权限说明
 userType 1: 超管 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户
 
 超级管理元账号: admin  123456
+
+| code | 类型 | 说明 |
+|:-------- |:---- |:---|
+|userType |number| 用户类型 2: 管理员 3: 单位管理员 4: 普通用户 5: 代理用户|
+|phone |number| 电话|
+|id |number|用户id|
+|trueName |string|姓名|
+|email |string|邮箱|
+|projectIds |int[]|用户被分配的公司id|
+|start |int|第几页，默认第一页|
+|limit |int|条数，默认返回所有条|

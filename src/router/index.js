@@ -35,6 +35,11 @@ const routes = [
         name: "warnning-page",
         component: () => import("../views/warning/Index.vue"),
       },
+      {
+        path: "company",
+        name: "company-manage-page",
+        component: () => import("../views/base-manage/Company.vue"),
+      },
     ]
   },
   {

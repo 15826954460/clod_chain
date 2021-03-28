@@ -17,10 +17,9 @@ import Plarfrom from "@/components/user/Platform.vue";
 import { USER_ROLE_TYPE } from "@/constant";
 const DEFATULT_ACTIVE_KEY = "2";
 
-import { mapState, createNamespacedHelpers, mapMutations } from "vuex";
+import { createNamespacedHelpers } from "vuex";
 const {
   mapState: mapStateUser,
-  mapMutations: mapMutationsUser,
 } = createNamespacedHelpers("user");
 
 export default {

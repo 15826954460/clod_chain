@@ -1,5 +1,6 @@
 <template>
   <div class="platform-container" id="platformContainer">
+    <a-button type="primary" size="small" style="margin-bottom: 10px;" @click="createUser">新建用户</a-button>
     <a-table
       :columns="columns"
       :data-source="data"
@@ -173,6 +174,11 @@ export default {
       } else {
         this.$message("删除用户失败，请稍后再试");
       }
+    },
+
+    createUser() {
+      this.row = { userType: this.userType };
+      this.visible = true;
     },
 
     cancel(bool) {

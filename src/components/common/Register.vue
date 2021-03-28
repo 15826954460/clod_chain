@@ -98,7 +98,7 @@
       label="角色"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
-      >
+    >
       <SelectUserType
         v-decorator="[
           'userType',
@@ -346,6 +346,8 @@ export default {
       if (code === 200) {
         this.$emit("cancel", false);
         this.$emit("updateList");
+      } else if (code === 10036) {
+        this.$message.error("手机号已存在");
       }
     },
 

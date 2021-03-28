@@ -64,5 +64,26 @@ export default {
         params,
       });
     },
+
+    // ------- 删除用户
+    delUser(id) {
+      return postFetch({
+        url: "/users",
+        interfaceKey: "delUser",
+        params: { id },
+        method: "DELETE",
+      });
+    }
   },
+
+  company: {
+    // ------ 获取单位列表
+    getCompanyList(params) {
+      return getFetch({
+        url: "/projects",
+        interfaceKey: "getUserList",
+        params,
+      });
+    }
+  }
 };
