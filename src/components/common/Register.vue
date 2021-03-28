@@ -286,19 +286,17 @@ export default {
         // } else {
         //   values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
         // }
-        console.log('------------', values);
-        return;
-        // // 修改其它用户信息
-        // if (this.isEditOther) {
-        //   this.updateOther(values);
-        //   return;
-        // }
-        // // 修改当前用户信息
-        // if (this.isEdit) {
-        //   this.updateSelf({ ...values, id: this.userId });
-        //   return;
-        // }
-        // this.register(values);
+        // 修改其它用户信息
+        if (this.isEditOther) {
+          this.updateOther(values);
+          return;
+        }
+        // 修改当前用户信息
+        if (this.isEdit) {
+          this.updateSelf({ ...values, id: this.userId });
+          return;
+        }
+        this.register(values);
       });
     },
 
