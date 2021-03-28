@@ -69,8 +69,6 @@ export default {
     };
   },
 
-  created() {},
-  mounted() {},
   methods: {
     callback(key) {
       console.log(key);

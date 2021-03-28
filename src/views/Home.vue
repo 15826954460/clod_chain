@@ -100,7 +100,7 @@
     >
       <Register
         :isUpdate="true"
-        :userInfo="userInfo"
+        :userInfo="row"
         @cancel="showLookUserInfoChange"
       ></Register>
     </CusModule>
@@ -138,6 +138,7 @@ export default {
       updateUserInfoModuleShow: false,
       updatePasswordModuleShow: false,
       loginAndRegisterShow: true,
+      row: {},
     };
   },
 
@@ -188,6 +189,7 @@ export default {
 
     showLookUserInfoChange(bool) {
       this.updateUserInfoModuleShow = bool;
+      this.row = bool ? this.userInfo : {};
     },
 
     changeLoginAndRegisterShow(bool) {

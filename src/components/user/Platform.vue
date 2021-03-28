@@ -4,6 +4,7 @@
       :columns="columns"
       :data-source="data"
       :pagination="false"
+      :loading="loading"
       bordered
       size="small"
       rowKey="id"
@@ -17,16 +18,35 @@
         >
           编辑
         </a-button>
-        <a-button type="danger" size="small" @click="del(record)">
-          删除</a-button
+
+        <a-popconfirm
+          :title="`确认删除当前用户${record.trueName}`"
+          ok-text="确认"
+          cancel-text="取消"
+          @confirm="confirmDel(record)"
+          @cancel="cancel"
         >
+          <a-button type="danger" size="small"> 删除</a-button>
+        </a-popconfirm>
       </p>
     </a-table>
+    <CusModule :visible="visible" @cancel="cancel">
+      <Register
+        :isEdit="true"
+        :isEditOther="true"
+        :userInfo="row"
+        @cancel="cancel"
+        @updateList="getUserList"
+      ></Register>
+    </CusModule>
   </div>
 </template>
 
 <script>
+import utils from "@/utils/common";
 import api from "@/axios/api";
+import CusModule from "@/components/common/CusModule.vue";
+import Register from "@/components/common/Register.vue";
 
 import { USER_ROLE_TYPE } from "@/constant";
 
@@ -62,6 +82,10 @@ const columns = [
     dataIndex: "trueName",
   },
   {
+    title: "用户名",
+    dataIndex: "username"
+  },
+  {
     title: "邮箱",
     dataIndex: "email",
   },
@@ -87,13 +111,18 @@ export default {
     },
   },
 
-  components: {},
+  components: {
+    CusModule,
+    Register,
+  },
 
   data() {
     return {
       data: [],
       columns,
       loading: false,
+      visible: false,
+      row: {},
     };
   },
 
@@ -105,18 +134,53 @@ export default {
 
   methods: {
     async getUserList() {
-      const { code, data } = await api.user.getUserList();
+      this.loading = true;
+      const { code, data, msg } = await api.user.getUserList();
       if (code === 200) {
         const __data = data.filter((item) => {
           return item.userType !== 1;
         });
         this.data = __data;
+      } else {
+        utils.log(`${msg}-----${code}`);
+      }
+      this.loading = false;
+    },
+
+    async edit(record) {
+      const { id } = record;
+      if (!id) {
+        this.$message("没有获取到用户id");
+        return;
+      }
+      const { code, data, msg } = await api.user.getUserInfo({ id });
+      if (code === 200) {
+        this.row = data;
+        this.visible = true;
+      } else {
+        this.$message(`error code: ${code} message: ${msg}`);
       }
     },
 
-    edit() {},
+    async confirmDel({ id }) {
+      if (!id) {
+        this.$message("没有获取到用户id");
+        return;
+      }
+      const { code } = await api.user.delUser(id);
+      if (code === 200) {
+        this.getUserList();
+      } else {
+        this.$message("删除用户失败，请稍后再试");
+      }
+    },
 
-    del() {},
+    cancel(bool) {
+      this.visible = bool;
+      if (!bool) {
+        this.row = {};
+      }
+    },
   },
 };
 </script>
