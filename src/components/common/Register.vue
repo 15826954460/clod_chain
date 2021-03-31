@@ -17,7 +17,7 @@
       />
     </a-form-item>
     <a-form-item
-      v-if="isCreate || !isEdit"
+      v-if="isCreate && !isEdit || (!isCreate && !isEdit)"
       label="密码"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"

@@ -1,9 +1,15 @@
 <template>
   <div class="platform-container" id="platformContainer">
-    <a-button type="primary" size="small" style="margin-bottom: 10px;" @click="createUser">新建用户</a-button>
+    <a-button
+      type="primary"
+      size="small"
+      style="margin-bottom: 10px"
+      @click="createUser"
+      >新建用户</a-button
+    >
     <a-table
       :columns="columns"
-      :data-source="data"
+      :data-source="dataList"
       :pagination="false"
       :loading="loading"
       bordered
@@ -25,7 +31,7 @@
           ok-text="确认"
           cancel-text="取消"
           @confirm="confirmDel(record)"
-          @cancel="cancel"
+          @cancel="cancel(false)"
         >
           <a-button type="danger" size="small"> 删除</a-button>
         </a-popconfirm>
@@ -38,18 +44,16 @@
         :isEditOther="true"
         :userInfo="row"
         @cancel="cancel"
-        @updateList="getUserList"
+        @updateList="$emit('click')"
       ></Register>
     </CusModule>
   </div>
 </template>
 
 <script>
-import utils from "@/utils/common";
 import api from "@/axios/api";
 import CusModule from "@/components/common/CusModule.vue";
 import Register from "@/components/common/Register.vue";
-
 import { USER_ROLE_TYPE } from "@/constant";
 
 const columns = [
@@ -85,7 +89,7 @@ const columns = [
   },
   {
     title: "用户名",
-    dataIndex: "username"
+    dataIndex: "username",
   },
   {
     title: "邮箱",
@@ -105,6 +109,14 @@ export default {
       type: Number,
       required: true,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   components: {
@@ -114,34 +126,14 @@ export default {
 
   data() {
     return {
-      data: [],
       columns,
-      loading: false,
       visible: false,
       row: {},
-      isCreate: true,
+      isCreate: false,
     };
   },
 
-  mounted() {
-    this.getUserList();
-  },
-
   methods: {
-    async getUserList() {
-      this.loading = true;
-      const { code, data, msg } = await api.user.getUserList({ userType: this.userType });
-      if (code === 200) {
-        const __data = data.filter((item) => {
-          return item.userType !== 1;
-        });
-        this.data = __data;
-      } else {
-        utils.log(`${msg}-----${code}`);
-      }
-      this.loading = false;
-    },
-
     async edit(record) {
       const { id } = record;
       if (!id) {
@@ -164,7 +156,7 @@ export default {
       }
       const { code } = await api.user.delUser(id);
       if (code === 200) {
-        this.getUserList();
+        this.$emit("click");
       } else {
         this.$message("删除用户失败，请稍后再试");
       }
@@ -173,7 +165,7 @@ export default {
     createUser() {
       this.row = { userType: this.userType };
       this.visible = true;
-      this.isEdit = false;
+      this.isCreate = true;
     },
 
     cancel(bool) {
