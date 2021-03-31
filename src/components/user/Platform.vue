@@ -34,6 +34,7 @@
     <CusModule :visible="visible" @cancel="cancel">
       <Register
         :isEdit="true"
+        :isCreate="isCreate"
         :isEditOther="true"
         :userInfo="row"
         @cancel="cancel"
@@ -118,6 +119,7 @@ export default {
       loading: false,
       visible: false,
       row: {},
+      isCreate: true,
     };
   },
 
@@ -171,6 +173,7 @@ export default {
     createUser() {
       this.row = { userType: this.userType };
       this.visible = true;
+      this.isEdit = false;
     },
 
     cancel(bool) {

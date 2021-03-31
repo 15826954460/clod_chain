@@ -17,7 +17,7 @@
       />
     </a-form-item>
     <a-form-item
-      v-if="!isEdit"
+      v-if="isCreate || !isEdit"
       label="密码"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
@@ -95,7 +95,7 @@
       />
     </a-form-item>
     <a-form-item
-      v-if="userId"
+      v-if="isShowRole"
       label="角色"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
@@ -165,6 +165,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isCreate: {
+      type: Boolean,
+      default: false,
+    },
     isEditOther: {
       type: Boolean,
       default: false,
@@ -187,7 +191,12 @@ export default {
   computed: {
     ...mapStateUser({
       userId: (state) => state.userInfo.userId,
+      userType: (state) => state.userInfo.userType,
     }),
+
+    isShowRole() {
+      return this.userType && (this.userType == 1 || this.userType === 2);
+    },
   },
 
   methods: {
@@ -238,12 +247,19 @@ export default {
     async register(values) {
       const { code } = await api.user.register(values);
       if (code === 200) {
-        this.$message.success("注册成功,即将跳转到登录页面", 2);
-        let __timer = setTimeout(() => {
-          this.$emit("loginRegisterSwitch", true);
-          clearTimeout(__timer);
-          __timer = null;
-        }, 2000);
+        // 未登录下创建
+        if (!this.userId) {
+          this.$message.success("注册成功,即将跳转到登录页面", 2);
+          let __timer = setTimeout(() => {
+            this.$emit("loginRegisterSwitch", true);
+            clearTimeout(__timer);
+            __timer = null;
+          }, 2000);
+        } else {
+          // 已登录下创建
+          this.$message.success("注册成功");
+          this.$emit("cancel", false);
+        }
       } else if (code === 10036) {
         this.$message.error("该手机号已存在");
       } else {
