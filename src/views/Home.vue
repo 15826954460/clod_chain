@@ -99,7 +99,7 @@
       @cancel="showLookUserInfoChange"
     >
       <Register
-        :isUpdate="true"
+        :isEdit="true"
         :userInfo="row"
         @cancel="showLookUserInfoChange"
       ></Register>

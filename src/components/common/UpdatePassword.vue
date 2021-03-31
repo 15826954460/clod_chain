@@ -5,16 +5,16 @@
     class="login-form"
   >
     <a-form-item
-      label="原密码"
+      label="旧密码"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
     >
       <a-input-password
         v-decorator="[
           'password',
-          { rules: [{ required: true, message: '请输入原密码' }] },
+          { rules: [{ required: true, message: '请输入旧密码' }] },
         ]"
-        placeholder="请输入原密码"
+        placeholder="请输入旧密码"
       />
     </a-form-item>
     <a-form-item
@@ -96,7 +96,7 @@ export default {
           return;
         }
         if (newPassword.trim() === password.trim()) {
-          this.$message.error("原密码和新密码不能重复");
+          this.$message.error("旧密码和新密码不能重复");
           return;
         }
         const { code } = await api.user.updatePassword({

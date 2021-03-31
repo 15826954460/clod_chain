@@ -95,6 +95,7 @@
       />
     </a-form-item>
     <a-form-item
+      v-if="userId"
       label="角色"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
@@ -103,73 +104,12 @@
         v-decorator="[
           'userType',
           {
-            initialValue: userInfo.userType || 0,
+            initialValue: Number(userInfo.userType) || '',
           },
         ]"
         @change="handleTypeSelectChange"
       ></SelectUserType>
     </a-form-item>
-    <!-- <a-form-item
-      label="单位"
-      :label-col="formItemLayout.labelCol"
-      :wrapper-col="formItemLayout.wrapperCol"
-    >
-    </a-form-item> -->
-    <!-- 
-        <a-form-item
-          label="单位名称"
-          :label-col="addressItemLayout.labelCol"
-          :wrapper-col="addressItemLayout.wrapperCol"
-        >
-          <a-input
-            v-decorator="[
-              'company',
-              {
-                initialValue: userInfo.company || '',
-                rules: [{ required: true, message: '请输入单位名称' }],
-              },
-            ]"
-            placeholder="请输入单位名称"
-          />
-        </a-form-item>
-     -->
-    <!-- 
-        <a-form-item
-          label="选择地址"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
-          <a-cascader
-            :options="options"
-            placeholder="请选择地址"
-            @change="selAddrChange"
-            v-decorator="[
-              'area',
-              {
-                initialValue: userInfo.area || [],
-                rules: [{ required: true, message: '请选择地址' }],
-              },
-            ]"
-          />
-        </a-form-item> -->
-    <!--
-        <a-form-item
-          label="详细地址"
-          :label-col="addressItemLayout.labelCol"
-          :wrapper-col="addressItemLayout.wrapperCol"
-        >
-          <a-textarea
-            v-decorator="[
-              'address',
-              {
-                initialValue: userInfo.address || '',
-                rules: [{ required: true, message: '请输入地址' }],
-              },
-            ]"
-            placeholder="请输入地址"
-          />
-        </a-form-item>
-      -->
     <div class="__flex __rfec btn-wrapper">
       <a-button style="margin-right: 20px" @click="cancelHandle">取消</a-button>
       <a-button type="primary" @click.self="submit">确定</a-button>
@@ -249,10 +189,6 @@ export default {
   methods: {
     ...mapActionsUser(["updateUserInfoAct"]),
 
-    // selAddrChange(value, selOptions) {
-    //   console.log(1111, value, selOptions);
-    // },
-
     // 自定义密码验证
     passwordValidator(rule, value, callback) {
       let message = undefined;
@@ -280,12 +216,6 @@ export default {
           console.log("Received values of form: ", err);
           return;
         }
-        // const { area, address } = values;
-        // if (area[0] === area[1]) {
-        //   values.detailAdress = `${area[1]}市${area[2]}区${address}`;
-        // } else {
-        //   values.detailAdress = `${area[0]}省${area[1]}市${area[2]}区${address}`;
-        // }
         // 修改其它用户信息
         if (this.isEditOther) {
           this.updateOther(values);

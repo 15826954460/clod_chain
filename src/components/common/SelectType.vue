@@ -1,6 +1,6 @@
 <template>
   <a-select :value="value" placeholder="请选择角色" @change="handleChange">
-    <a-select-option v-for="item in roleList" :value="item.value" :key="item.value">
+    <a-select-option v-for="item in roleList" :value="Number(item.value)" :key="item.value">
       {{ item.label }}
     </a-select-option>
   </a-select>
@@ -19,8 +19,8 @@ export default {
 
   props: {
     value: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: '',
     }
   },
 
