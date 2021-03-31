@@ -38,7 +38,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] 修改密码
 - [x] 删除用户
 - [x] 获取用户信息
-- [x] 修改用户信息(用户信息/角色)
+- [ ] 修改用户信息(用户信息/角色)
 - [x] 获取用户列表
 - [ ] 添加用户
 - [x] 获取单位列表
