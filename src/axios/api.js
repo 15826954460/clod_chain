@@ -91,7 +91,7 @@ export default {
     getCompanyList(params) {
       return getFetch({
         url: "/projects",
-        interfaceKey: "getUserList",
+        interfaceKey: "getCompanyList",
         params,
       });
     }

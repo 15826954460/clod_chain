@@ -106,12 +106,6 @@ export default {
     },
   },
 
-  watch: {
-    userType(newVal, oldVal) {
-      this.getUserList();
-    },
-  },
-
   components: {
     CusModule,
     Register,
@@ -127,16 +121,14 @@ export default {
     };
   },
 
-  created() {
+  mounted() {
     this.getUserList();
   },
-
-  mounted() {},
 
   methods: {
     async getUserList() {
       this.loading = true;
-      const { code, data, msg } = await api.user.getUserList();
+      const { code, data, msg } = await api.user.getUserList({ userType: this.userType });
       if (code === 200) {
         const __data = data.filter((item) => {
           return item.userType !== 1;

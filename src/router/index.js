@@ -16,11 +16,6 @@ const routes = [
         component: () => import("../views/user/UserList.vue"),
       },
       {
-        path: "update-secret",
-        name: "update-secret-page",
-        component: () => import("../views/user/UpdatePassword.vue"),
-      },
-      {
         path: "option-log",
         name: "option-log-page",
         component: () => import("../views/user/OptionLog.vue"),

@@ -180,6 +180,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.form.resetFields();
+  },
+
   computed: {
     ...mapStateUser({
       userId: (state) => state.userInfo.userId,
@@ -205,7 +209,6 @@ export default {
     },
 
     cancelHandle() {
-      this.form.resetFields();
       this.$emit("cancel", this.isEdit ? false : true);
     },
 
@@ -226,6 +229,8 @@ export default {
           this.updateSelf({ ...values, id: this.userId });
           return;
         }
+
+        // 注册用户
         this.register(values);
       });
     },
@@ -233,14 +238,13 @@ export default {
     async register(values) {
       const { code } = await api.user.register(values);
       if (code === 200) {
-        this.$message.success("注册成功,即将跳转到登录页面", 2.5);
+        this.$message.success("注册成功,即将跳转到登录页面", 2);
         let __timer = setTimeout(() => {
           this.$emit("loginRegisterSwitch", true);
           clearTimeout(__timer);
           __timer = null;
-        }, 1000);
-      }
-      if (code === 10036) {
+        }, 2000);
+      } else if (code === 10036) {
         this.$message.error("该手机号已存在");
       } else {
         this.$message.error("注册失败,请重新尝试");
