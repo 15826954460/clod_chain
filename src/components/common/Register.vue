@@ -17,11 +17,7 @@
       />
     </a-form-item>
     <a-form-item
-<<<<<<< HEAD
-      v-if="isCreate && !isEdit || (!isCreate && !isEdit)"
-=======
       v-if="updatePassword || isCreate"
->>>>>>> feat: 修改git配置
       label="密码"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
