@@ -7,6 +7,7 @@
       :closable="isShowClose"
       :maskClosable="false"
       :footer="null"
+      :width="width"
       @cancel="handleCancel"
       :id="isShowFooterBorder ? '' : 'border-none'"
     >
@@ -43,6 +44,10 @@ export default {
     isShowFooterBorder: {
       type: Boolean,
       default: true,
+    },
+    width: {
+      type: Number,
+      default: 520
     }
   },
 

@@ -110,7 +110,7 @@
       title="修改密码"
       @cancel="updatePasswordHander"
     >
-      <UpdatePassword @cancel="updatePasswordHander"></UpdatePassword>
+      <UpdatePassword @cancel="updatePasswordHander" :updatePassword="true"></UpdatePassword>
     </CusModule>
   </div>
 </template>

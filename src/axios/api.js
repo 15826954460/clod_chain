@@ -94,6 +94,26 @@ export default {
         interfaceKey: "getCompanyList",
         params,
       });
+    },
+
+    // 编辑单位
+    updateCompanyList(params) {
+      return postFetch({
+        url: "/projects",
+        interfaceKey: "updateCompanyList",
+        params,
+        method: "PUT"
+      })
+    },
+
+    // 编辑单位
+    createCompanyList(params) {
+      return postFetch({
+        url: "/projects",
+        interfaceKey: "createCompanyList",
+        params,
+        method: "POST"
+      })
     }
   }
 };

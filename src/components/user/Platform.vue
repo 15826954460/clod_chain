@@ -39,9 +39,8 @@
     </a-table>
     <CusModule :visible="visible" @cancel="cancel">
       <Register
-        :isEdit="true"
         :isCreate="isCreate"
-        :isEditOther="true"
+        :isEditOther="isEditOther"
         :userInfo="row"
         @cancel="cancel"
         @updateList="$emit('click')"
@@ -130,6 +129,7 @@ export default {
       visible: false,
       row: {},
       isCreate: false,
+      isEditOther: false,
     };
   },
 
@@ -144,6 +144,7 @@ export default {
       if (code === 200) {
         this.row = data;
         this.visible = true;
+        this.isEditOther = true;
       } else {
         this.$message(`error code: ${code} message: ${msg}`);
       }
@@ -172,6 +173,8 @@ export default {
       this.visible = bool;
       if (!bool) {
         this.row = {};
+        this.isCreate = false;
+        this.isEditOther = false;
       }
     },
   },
