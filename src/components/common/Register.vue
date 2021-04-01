@@ -189,7 +189,7 @@ export default {
   },
 
   mounted() {
-    this.form.resetFields();
+    console.log(1111);
   },
 
   computed: {
@@ -199,7 +199,7 @@ export default {
     }),
 
     isShowRole() {
-      return this.userType && (this.userType == 1 || this.userType === 2);
+      return this.userType && (this.userType == 1 || this.userType === 2) && !this.isCreate;
     },
   },
 
@@ -222,7 +222,8 @@ export default {
     },
 
     cancelHandle() {
-      this.$emit("cancel", this.isEdit ? false : true);
+      this.form.resetFields();
+      this.$emit("cancel", (this.isEdit || this.isEditOther) ? false : true);
     },
 
     submit(e) {
@@ -263,6 +264,7 @@ export default {
           // 已登录下创建
           this.$message.success("注册成功");
           this.$emit("cancel", false);
+          this.$emit("updateList");
         }
       } else if (code === 10036) {
         this.$message.error("该手机号已存在");
@@ -274,7 +276,7 @@ export default {
     async updateSelf(values) {
       const { code } = await api.user.updateUserInfo(values);
       if (code === 200) {
-        // 待处理
+        // 重新获取用户信息
         const { code } = await this.updateUserInfoAct({
           id: this.userId,
         });

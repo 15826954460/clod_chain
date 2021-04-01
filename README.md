@@ -44,8 +44,14 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] 获取单位列表
 - [ ] 短信验证带开发
 - [ ] 用户信息加密到session-storage
+- [ ] 获取单位列表
+- [ ] 修改单位信息
+- [ ] 新增单位
+- [ ] 删除单位
 
-#### 菜单角色相关的接口用不上
+#### 问题
+修改单位 关于 联系人字段 的传参确认 linkmanInfo
+areacode 字段 确认干什么用的
 
 ### 测试账号、密码
 bys_001 bys_001

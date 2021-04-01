@@ -1,7 +1,7 @@
 <template>
   <div class="company-container">
-    <a-button type="primary" size="small" style="margin-bottom: 10px"
-      >编辑</a-button
+    <a-button type="primary" size="small" style="margin-bottom: 10px" @click="createCompany"
+      >新建</a-button
     >
     <a-table
       :columns="columns"
@@ -13,8 +13,7 @@
       rowKey="id"
     >
       <p slot="mapPosition" slot-scope="text">
-        经度：{{ text.split(",")[0] }}<br />
-        维度：{{ text.split(",")[1] }}
+        经度：{{ text.split(",")[0] }} 纬度：{{ text.split(",")[1] }}
       </p>
       <p slot="action" slot-scope="text, record">
         <a-button
@@ -30,7 +29,7 @@
           :title="`确认删除当前用户${record.trueName}`"
           ok-text="确认"
           cancel-text="取消"
-          @confirm="confirmDel(record)"
+          @confirm="del(record)"
           @cancel="cancel(false)"
         >
           <a-button type="danger" size="small"> 删除</a-button>
@@ -77,11 +76,12 @@
           :wrapper-col="formItemLayout.wrapperCol"
         >
           <a-input-number
+            :disabled="true"
             style="width: 100%"
             v-decorator="[
               'buildingNum',
               {
-                initialValue: row.buildingNum || 1,
+                initialValue: row.buildingNum,
                 rules: [{ required: true, message: '建筑物数量' }],
               },
             ]"
@@ -120,7 +120,7 @@
               },
             ]"
             placeholder="请输入公司联系人"
-            :autosize="{ minRow: 1 }"
+            :autoSize="{ minRow: 1 }"
           />
         </a-form-item>
         <div class="__flex __rfec">
@@ -220,6 +220,11 @@ export default {
       this.visible = true;
     },
 
+    createCompany() {
+      this.row = {};
+      this.visible = true;
+    },
+
     cancel() {
       this.form.resetFields();
       this.row = {};
@@ -236,14 +241,13 @@ export default {
         if (id) {
           this.update({ id, ...values });
         } else {
-          this.create();
+          this.create(values);
         }
-        console.log(values);
       });
     },
 
     async update(values) {
-      const { code } = await api.company.updateCompanyList(values);
+      const { code } = await api.company.updateCompanyList({ areaCode: 324 ,...values });
       if (code === 200) {
         this.row = {};
         this.visible = false;
@@ -252,13 +256,21 @@ export default {
     },
 
     async create(values) {
-      const { code } = await api.company.createCompanyList(values);
+      const { code } = await api.company.createCompanyList({ areaCode: 111, ...values });
       if (code === 200) {
         this.row = {};
         this.visible = false;
         this.fetchList();
       }
     },
+
+    async del({ id }) {
+      if (!id) return;
+      const { code } = await api.company.delCompanyList(id);
+      if (code === 200) {
+        this.fetchList();
+      }
+    }
   },
 };
 </script>

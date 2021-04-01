@@ -114,6 +114,16 @@ export default {
         params,
         method: "POST"
       })
+    },
+
+    // 删除单位
+    delCompanyList(id) {
+      return postFetch({
+        url: "/projects",
+        interfaceKey: "createCompanyList",
+        params: { id },
+        method: "DELETE"
+      })
     }
   }
 };
