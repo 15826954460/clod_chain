@@ -25,7 +25,7 @@ const mutations = {
     };
   },
 
-  clearUpdateInfo() {
+  clearUserInfo() {
     state.userInfo = {};
   },
 };

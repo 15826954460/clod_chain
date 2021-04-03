@@ -1,19 +1,17 @@
 <template>
-  <div class="modele-wrapper">
-    <a-modal
-      :title="title"
-      :visible="visible"
-      :centered="isCenter"
-      :closable="isShowClose"
-      :maskClosable="false"
-      :footer="null"
-      :width="width"
-      @cancel="handleCancel"
-      :id="isShowFooterBorder ? '' : 'border-none'"
-    >
-      <slot></slot>
-    </a-modal>
-  </div>
+  <a-modal
+    :visible="visible"
+    :title="title"
+    :centered="isCenter"
+    :closable="isShowClose"
+    :maskClosable="false"
+    :width="width"
+    :footer="null"
+    @cancel="$emit('cancel')"
+    @ok="$emit('ok')"
+  >
+    <slot></slot>
+  </a-modal>
 </template>
 
 <script>
@@ -23,11 +21,11 @@ export default {
   props: {
     title: {
       type: String,
-      default: ""
+      default: "",
     },
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isCenter: {
       type: Boolean,
@@ -37,32 +35,14 @@ export default {
       type: Boolean,
       default: true,
     },
-    isShowFooter: {
-      type: Boolean,
-      default: true,
-    },
     isShowFooterBorder: {
       type: Boolean,
       default: true,
     },
     width: {
       type: Number,
-      default: 520
-    }
+      default: 520,
+    },
   },
-
-  methods: {
-    handleCancel() {
-      this.$emit("cancel", false);
-    }
-  }
 };
 </script>
-
-<style lang='scss' scoped>
-#border-none {
-  /deep/ .ant-modal-footer {
-    border: none;
-  }
-}
-</style>

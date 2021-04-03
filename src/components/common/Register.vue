@@ -17,7 +17,7 @@
       />
     </a-form-item>
     <a-form-item
-      v-if="updatePassword || isCreate"
+      v-if="isCreate"
       label="密码"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
@@ -173,10 +173,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    updatePassword: {
-      type: Boolean,
-      default: false,
-    }
   },
 
   data() {
@@ -188,10 +184,6 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(1111);
-  },
-
   computed: {
     ...mapStateUser({
       userId: (state) => state.userInfo.userId,
@@ -199,8 +191,16 @@ export default {
     }),
 
     isShowRole() {
-      return this.userType && (this.userType == 1 || this.userType === 2) && !this.isCreate;
+      return (
+        this.userType &&
+        (this.userType == 1 || this.userType === 2 || this.userType === 5) &&
+        !this.isCreate
+      );
     },
+  },
+
+  mounted() {
+    this.form.resetFields();
   },
 
   methods: {
@@ -222,35 +222,32 @@ export default {
     },
 
     cancelHandle() {
-      this.form.resetFields();
-      this.$emit("cancel", (this.isEdit || this.isEditOther) ? false : true);
+      this.$emit("cancel", false);
     },
 
     submit(e) {
       e.preventDefault();
       this.form.validateFields(async (err, values) => {
-        if (err) {
-          console.log("Received values of form: ", err);
-          return;
-        }
-        // 修改其它用户信息
-        if (this.isEditOther) {
-          this.updateOther(values);
-          return;
-        }
-        // 修改当前用户信息
-        if (this.isEdit) {
-          this.updateSelf({ ...values, id: this.userId });
-          return;
-        }
+        if (!err) {
+          // 修改其它用户信息
+          if (this.isEditOther) {
+            this.updateOther(values);
+            return;
+          }
+          // 修改当前用户信息
+          if (this.isEdit) {
+            this.updateSelf({ ...values, id: this.userId });
+            return;
+          }
 
-        // 注册用户
-        this.register(values);
+          // 注册用户
+          this.register(values);
+        }
       });
     },
 
     async register(values) {
-      const { code } = await api.user.register(values);
+      const { code, msg } = await api.user.register(values);
       if (code === 200) {
         // 未登录下创建
         if (!this.userId) {
@@ -266,8 +263,9 @@ export default {
           this.$emit("cancel", false);
           this.$emit("updateList");
         }
-      } else if (code === 10036) {
-        this.$message.error("该手机号已存在");
+      } else if (code === 10036 || code === 10033) {
+        // 10033 用户已存在 10036 手机号已存在
+        this.$message.error(msg);
       } else {
         this.$message.error("注册失败,请重新尝试");
       }

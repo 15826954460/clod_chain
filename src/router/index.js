@@ -6,12 +6,10 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Home.vue"),
+    component: () => import("../views/Home.vue"),
     children: [
       {
-        path: "user-list",
+        path: "",
         name: "user-list-page",
         component: () => import("../views/user/UserList.vue"),
       },
@@ -35,14 +33,8 @@ const routes = [
         name: "company-manage-page",
         component: () => import("../views/base-manage/Company.vue"),
       },
-    ]
+    ],
   },
-  {
-    path: "/*",
-    redirect: {
-      path: "/"
-    }
-  }
 ];
 
 const router = new VueRouter({

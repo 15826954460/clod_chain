@@ -6,7 +6,13 @@
         :key="`${item.value}`"
         :tab="item.label"
       >
-        <Plarfrom :userType="item.value" :activeKey="activeKey" @click="getUserList" :loading="loading" :dataList="data"></Plarfrom>
+        <Plarfrom
+          :userType="item.value"
+          :activeKey="activeKey"
+          @click="getUserList"
+          :loading="loading"
+          :dataList="data"
+        ></Plarfrom>
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -19,7 +25,7 @@ import { USER_ROLE_TYPE } from "@/constant";
 import utils from "@/utils/common";
 const DEFATULT_ACTIVE_KEY = "2";
 
-import { createNamespacedHelpers } from "vuex";
+import { createNamespacedHelpers, mapState } from "vuex";
 const { mapState: mapStateUser } = createNamespacedHelpers("user");
 
 export default {
@@ -30,6 +36,9 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      isLogined: (state) => state.isLogined,
+    }),
     ...mapStateUser({
       userType: (state) => state.userInfo.userType,
     }),
@@ -62,6 +71,15 @@ export default {
     },
   },
 
+  watch: {
+    isLogined(nv, olv) {
+      if (nv) {
+        this.getUserList();
+        this.activeKey = this.roleList[0].userType;
+      }
+    }
+  },
+
   data() {
     return {
       defaultActiveKey: DEFATULT_ACTIVE_KEY,
@@ -78,7 +96,7 @@ export default {
   methods: {
     tabChange(key) {
       this.activeKey = key;
-      this.getUserList()
+      this.getUserList();
     },
 
     async getUserList() {
@@ -99,6 +117,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-</style>

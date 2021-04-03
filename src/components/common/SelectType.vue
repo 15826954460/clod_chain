@@ -1,6 +1,10 @@
 <template>
   <a-select :value="value" placeholder="请选择角色" @change="handleChange">
-    <a-select-option v-for="item in roleList" :value="Number(item.value)" :key="item.value">
+    <a-select-option
+      v-for="item in roleList"
+      :value="Number(item.value)"
+      :key="item.value"
+    >
       {{ item.label }}
     </a-select-option>
   </a-select>
@@ -10,9 +14,7 @@
 import { USER_ROLE_TYPE } from "@/constant";
 
 import { createNamespacedHelpers } from "vuex";
-const {
-  mapState: mapStateUser,
-} = createNamespacedHelpers("user");
+const { mapState: mapStateUser } = createNamespacedHelpers("user");
 
 export default {
   name: "select-type-com",
@@ -20,13 +22,13 @@ export default {
   props: {
     value: {
       type: [String, Number],
-      default: '',
-    }
+      default: "",
+    },
   },
 
   computed: {
     ...mapStateUser({
-       userType: (state) => state.userInfo.userType,
+      userType: (state) => state.userInfo.userType,
     }),
 
     roleList() {
@@ -42,6 +44,11 @@ export default {
             return item.userType > 2;
           });
           break;
+        case 5:
+          __roleList = USER_ROLE_TYPE.filter((item) => {
+            return item.userType === 3;
+          });
+          break;
       }
       return __roleList;
     },
@@ -49,7 +56,7 @@ export default {
 
   methods: {
     handleChange(value, option) {
-      this.$emit('change', value)
+      this.$emit("change", value);
     },
   },
 };

@@ -31,19 +31,6 @@
         <a-icon slot="prefix" type="lock" style="color: rgba(0, 0, 0, 0.25)" />
       </a-input>
     </a-form-item>
-    <div
-      style="
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 0;
-      "
-    >
-      <span class="register" @click="registerHander">注册账号</span>
-      <a-button type="primary" size="small" @click="handleSubmit"
-        >登陆</a-button
-      >
-    </div>
     <!-- 短信验证业务有待开发 TODO: -->
   </a-form>
 </template>
@@ -64,7 +51,7 @@ export default {
   },
 
   beforeCreate() {
-    this.form = this.$form.createForm(this, { name: "normal_login" });
+    this.form = this.$form.createForm(this, { name: "login" });
   },
 
   mounted() {},
@@ -73,8 +60,7 @@ export default {
     ...mapMutations(["updateLogin", "updateToken"]),
     ...mapMutationsUser(["updateUserInfo"]),
 
-    handleSubmit(e) {
-      e.preventDefault();
+    submit() {
       this.form.validateFields(async (err, values) => {
         if (err) {
           console.log("Received values of form: ", values);
@@ -121,11 +107,6 @@ export default {
           this.$message.error("登录失败,请重新尝试");
         }
       });
-    },
-
-    registerHander() {
-      this.form.resetFields();
-      this.$emit("loginRegisterSwitch", false);
     },
   },
 };

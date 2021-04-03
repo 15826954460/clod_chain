@@ -37,7 +37,7 @@
         </a-popconfirm>
       </p>
     </a-table>
-    <CusModule :visible="visible" @cancel="cancel">
+    <CusModule v-if="visible" :visible="visible" @cancel="cancel">
       <Register
         :isCreate="isCreate"
         :isEditOther="isEditOther"
@@ -145,6 +145,7 @@ export default {
         this.row = data;
         this.visible = true;
         this.isEditOther = true;
+        this.isCreate = false;
       } else {
         this.$message(`error code: ${code} message: ${msg}`);
       }
@@ -166,16 +167,15 @@ export default {
     createUser() {
       this.row = { userType: this.userType };
       this.visible = true;
+      this.isEditOther = false;
       this.isCreate = true;
     },
 
     cancel(bool) {
       this.visible = bool;
-      if (!bool) {
-        this.row = {};
-        this.isCreate = false;
-        this.isEditOther = false;
-      }
+      this.row = {};
+      this.isCreate = false;
+      this.isEditOther = false;
     },
   },
 };
