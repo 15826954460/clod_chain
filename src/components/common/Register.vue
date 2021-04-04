@@ -95,7 +95,6 @@
       />
     </a-form-item>
     <a-form-item
-      v-if="isShowRole"
       label="角色"
       :label-col="formItemLayout.labelCol"
       :wrapper-col="formItemLayout.wrapperCol"
@@ -189,14 +188,6 @@ export default {
       userId: (state) => state.userInfo.userId,
       userType: (state) => state.userInfo.userType,
     }),
-
-    isShowRole() {
-      return (
-        this.userType &&
-        (this.userType == 1 || this.userType === 2 || this.userType === 5) &&
-        !this.isCreate
-      );
-    },
   },
 
   mounted() {

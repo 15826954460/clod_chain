@@ -7,6 +7,9 @@ const CRYPTO_KEY = "bys_javascript_2021";
 const TOKEN = "TOKEN";
 const USER_INFO = "USER_INFO";
 
+const DEFAULT_SELECT_KEYS = "DEFAULT_SELECT_KEYS";
+const DEFAULT_OPEN_KEYS = "DEFAULT_OPEN_KEYS";
+
 const USER_ROLE_TYPE = [
   { label: '超级管理员', value: 1, userType: 1 },
   { label: '管理员', value: 2, userType: 2 },
@@ -20,4 +23,6 @@ export {
   USER_INFO,
   CRYPTO_KEY,
   USER_ROLE_TYPE,
+  DEFAULT_OPEN_KEYS,
+  DEFAULT_SELECT_KEYS,
 }

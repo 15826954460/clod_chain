@@ -38,32 +38,51 @@
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
           mode="inline"
-          :default-selected-keys="['1']"
-          :default-open-keys="['sub1']"
+          :default-selected-keys="defaultSelectedKeys"
+          :default-open-keys="defaultOpenKeys"
           style="height: 100%; padding: 0; overflow-y: scroll"
           theme="dark"
           @click="handleMeunItem"
         >
-          <a-menu-item key="/">首页</a-menu-item>
+          <a-menu-item key="/"> 首页 </a-menu-item>
+
           <a-sub-menu key="sub1">
             <span slot="title">
-              <a-icon type="deployment-unit" />设备信息
+              <a-icon type="deployment-unit" /> 设备信息
             </span>
-            <a-menu-item key="/equipment">设备列表</a-menu-item>
+            <a-menu-item key="/equipment"> 设备列表 </a-menu-item>
           </a-sub-menu>
+
           <a-sub-menu key="sub2">
-            <span slot="title"> <a-icon type="warning" />报警系统 </span>
-            <a-menu-item key="/warnning">报警列表</a-menu-item>
+            <span slot="title"> <a-icon type="warning" /> 报警系统 </span>
+            <a-menu-item key="/warnningaaa"> 报警列表 </a-menu-item>
           </a-sub-menu>
+
           <a-sub-menu key="sub3" v-show="userType !== 4">
-            <span slot="title"> <a-icon type="usergroup-add" />用户中心 </span>
-            <a-menu-item key="/user-list">用户列表</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub4">
-            <span slot="title"> <a-icon type="block" />配置 </span>
-            <a-menu-item key="/company" v-if="userType !== 4"
-              >单位管理</a-menu-item
+            <span slot="title"> <a-icon type="usergroup-add" /> 用户中心 </span>
+            <a-menu-item key="/manage-list" v-if="userType === 1">
+              管理员
+            </a-menu-item>
+            <a-menu-item
+              key="/company-list"
+              v-if="userType === 1 || userType === 2 || userType === 5"
             >
+              单位管理员
+            </a-menu-item>
+            <a-menu-item
+              key="/agent-list"
+              v-if="userType === 1 || userType === 2"
+            >
+              代理用户
+            </a-menu-item>
+            <a-menu-item key="/user-list" v-if="userType !== 4"> 普通用户 </a-menu-item>
+          </a-sub-menu>
+
+          <a-sub-menu key="sub4">
+            <span slot="title"> <a-icon type="block" /> 配置 </span>
+            <a-menu-item key="/company" v-if="userType !== 4">
+              单位管理
+            </a-menu-item>
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
@@ -87,19 +106,35 @@
 </template>
 
 <script>
-
-
 import { createNamespacedHelpers, mapMutations } from "vuex";
 const {
   mapState: mapStateUser,
   mapMutations: mapMutationsUser,
 } = createNamespacedHelpers("user");
 
+import sessionStorage from "@/utils/session-storage";
+
+import { DEFAULT_SELECT_KEYS, DEFAULT_OPEN_KEYS } from "@/constant";
+
 export default {
   name: "HomeContentCom",
+
   data() {
-    return {};
+    return {
+      defaultOpenKeys: [],
+      defaultSelectedKeys: [],
+    };
   },
+
+  created() {
+    const __defaultSelectedKeys = sessionStorage.get(DEFAULT_SELECT_KEYS);
+    const __defaultOpenKeys = sessionStorage.get(DEFAULT_OPEN_KEYS);
+    this.defaultSelectedKeys = __defaultSelectedKeys
+      ? __defaultSelectedKeys
+      : ["/"];
+    this.defaultOpenKeys = __defaultOpenKeys ? __defaultOpenKeys : [];
+  },
+
   computed: {
     ...mapStateUser({
       username: (state) => state.userInfo.username,
@@ -112,7 +147,17 @@ export default {
     ...mapMutationsUser(["clearUserInfo"]),
 
     handleMeunItem({ keyPath, key }) {
-      console.log(keyPath, key);
+      let __defaultSelectedKeys, __defaultOpenKeys;
+      if (keyPath.length > 0) {
+        __defaultSelectedKeys = keyPath.splice(0, 1);
+        __defaultOpenKeys = keyPath;
+      } else {
+        __defaultOpenKeys = [];
+        __defaultSelectedKeys = keyPath;
+      }
+      sessionStorage.set(DEFAULT_SELECT_KEYS, __defaultSelectedKeys);
+      sessionStorage.set(DEFAULT_OPEN_KEYS, __defaultOpenKeys);
+      if (this.$route.path === key) return;
       this.$router.push({ path: `${key}` });
     },
 

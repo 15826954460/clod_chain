@@ -1,12 +1,8 @@
 <template>
   <div class="platform-container" id="platformContainer">
-    <a-button
-      type="primary"
-      size="small"
-      style="margin-bottom: 10px"
-      @click="createUser"
-      >新建用户</a-button
-    >
+    <a-button type="primary" style="margin-bottom: 10px" @click="createUser">
+      {{ btnText }}
+    </a-button>
     <a-table
       :columns="columns"
       :data-source="dataList"
@@ -33,7 +29,7 @@
           @confirm="confirmDel(record)"
           @cancel="cancel(false)"
         >
-          <a-button type="danger" size="small"> 删除</a-button>
+          <a-button type="danger" size="small"> 删除 </a-button>
         </a-popconfirm>
       </p>
     </a-table>
@@ -104,8 +100,8 @@ export default {
   name: "plat-form-com",
 
   props: {
-    userType: {
-      type: Number,
+    roleType: {
+      type: [Number, String],
       required: true,
     },
     loading: {
@@ -115,6 +111,10 @@ export default {
     dataList: {
       type: Array,
       default: () => [],
+    },
+    btnText: {
+      type: String,
+      default: "",
     },
   },
 
@@ -165,7 +165,7 @@ export default {
     },
 
     createUser() {
-      this.row = { userType: this.userType };
+      this.row = { userType: this.roleType };
       this.visible = true;
       this.isEditOther = false;
       this.isCreate = true;
@@ -183,6 +183,7 @@ export default {
 
 <style scoped lang="scss">
 #platformContainer {
+  padding-top: 20px;
   /deep/ .ant-table-body {
     margin: 0;
   }

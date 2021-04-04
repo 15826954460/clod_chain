@@ -31,6 +31,7 @@ const mutations = {
 };
 
 const actions = {
+  // 获取用户信息
   updateUserInfoAct: async ({ commit, state, rootState }, params) => {
     const { code, data } = await api.user.getUserInfo(params);
     if (code === 200) {

@@ -10,8 +10,28 @@ const routes = [
     children: [
       {
         path: "",
-        name: "user-list-page",
-        component: () => import("../views/user/UserList.vue"),
+        name: "test-home",
+        component: () => import("../views/Test.vue"),
+      },
+      {
+        path: "manage-list",
+        name: "manage-list-page",
+        component: () => import("../views/user/Manage.vue"),
+      },
+      {
+        path: "company-list",
+        name: "manage-list-page",
+        component: () => import("../views/user/Company.vue"),
+      },
+      {
+        path: "agent-list",
+        name: "manage-list-page",
+        component: () => import("../views/user/Agent.vue"),
+      },
+      {
+        path: "user-list",
+        name: "manage-list-page",
+        component: () => import("../views/user/User.vue"),
       },
       {
         path: "option-log",
