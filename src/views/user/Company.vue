@@ -5,7 +5,7 @@
       :loading="loading"
       :roleType="roleType"
       :dataList="data"
-      btnText="创建公司管理员"
+      btnText="创建单位管理员"
     ></Plarfrom>
   </div>
 </template>

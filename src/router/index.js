@@ -14,6 +14,11 @@ const routes = [
         component: () => import("../views/Test.vue"),
       },
       {
+        path: "/test",
+        name: "test-home",
+        component: () => import("../views/Test.vue"),
+      },
+      {
         path: "manage-list",
         name: "manage-list-page",
         component: () => import("../views/user/Manage.vue"),
@@ -49,7 +54,7 @@ const routes = [
         component: () => import("../views/warning/Index.vue"),
       },
       {
-        path: "company",
+        path: "unit",
         name: "company-manage-page",
         component: () => import("../views/base-manage/Company.vue"),
       },

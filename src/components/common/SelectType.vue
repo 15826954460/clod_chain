@@ -44,9 +44,14 @@ export default {
             return item.userType > 2;
           });
           break;
+        case 3:
+          __roleList = USER_ROLE_TYPE.filter((item) => {
+            return item.userType === 4;
+          });
+          break;
         case 5:
           __roleList = USER_ROLE_TYPE.filter((item) => {
-            return item.userType === 3;
+            return item.userType === 4 || item.userType === 3;
           });
           break;
       }

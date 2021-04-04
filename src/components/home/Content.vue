@@ -37,6 +37,7 @@
     <a-layout style="background: #fff">
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
+          v-if="isLogined"
           mode="inline"
           :default-selected-keys="defaultSelectedKeys"
           :default-open-keys="defaultOpenKeys"
@@ -44,7 +45,7 @@
           theme="dark"
           @click="handleMeunItem"
         >
-          <a-menu-item key="/"> 首页 </a-menu-item>
+          <a-menu-item key="/"> <a-icon type="home" /> 首页 </a-menu-item>
 
           <a-sub-menu key="sub1">
             <span slot="title">
@@ -55,7 +56,7 @@
 
           <a-sub-menu key="sub2">
             <span slot="title"> <a-icon type="warning" /> 报警系统 </span>
-            <a-menu-item key="/warnningaaa"> 报警列表 </a-menu-item>
+            <a-menu-item key="/warnning"> 报警列表 </a-menu-item>
           </a-sub-menu>
 
           <a-sub-menu key="sub3" v-show="userType !== 4">
@@ -75,12 +76,14 @@
             >
               代理用户
             </a-menu-item>
-            <a-menu-item key="/user-list" v-if="userType !== 4"> 普通用户 </a-menu-item>
+            <a-menu-item key="/user-list" v-if="userType !== 4">
+              普通用户
+            </a-menu-item>
           </a-sub-menu>
 
           <a-sub-menu key="sub4">
             <span slot="title"> <a-icon type="block" /> 配置 </span>
-            <a-menu-item key="/company" v-if="userType !== 4">
+            <a-menu-item key="/unit" v-if="userType !== 4">
               单位管理
             </a-menu-item>
           </a-sub-menu>
@@ -106,14 +109,13 @@
 </template>
 
 <script>
-import { createNamespacedHelpers, mapMutations } from "vuex";
+import { createNamespacedHelpers, mapMutations, mapState } from "vuex";
 const {
   mapState: mapStateUser,
   mapMutations: mapMutationsUser,
 } = createNamespacedHelpers("user");
 
 import sessionStorage from "@/utils/session-storage";
-
 import { DEFAULT_SELECT_KEYS, DEFAULT_OPEN_KEYS } from "@/constant";
 
 export default {
@@ -122,7 +124,7 @@ export default {
   data() {
     return {
       defaultOpenKeys: [],
-      defaultSelectedKeys: [],
+      defaultSelectedKeys: ["/"],
     };
   },
 
@@ -131,11 +133,16 @@ export default {
     const __defaultOpenKeys = sessionStorage.get(DEFAULT_OPEN_KEYS);
     this.defaultSelectedKeys = __defaultSelectedKeys
       ? __defaultSelectedKeys
-      : ["/"];
-    this.defaultOpenKeys = __defaultOpenKeys ? __defaultOpenKeys : [];
+      : this.defaultSelectedKeys;
+    this.defaultOpenKeys = __defaultOpenKeys
+      ? __defaultOpenKeys
+      : this.defaultOpenKeys;
   },
 
   computed: {
+    ...mapState({
+      isLogined: (state) => state.isLogined,
+    }),
     ...mapStateUser({
       username: (state) => state.userInfo.username,
       userType: (state) => state.userInfo.userType,
@@ -174,6 +181,9 @@ export default {
       this.updateLogin(false);
       this.updateToken();
       sessionStorage.clear();
+      if (this.$route.path !== "/" || this.$route.path !== "/test") {
+        this.$router.push({ path: "/test" });
+      }
     },
   },
 };
