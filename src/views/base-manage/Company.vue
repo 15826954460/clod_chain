@@ -1,6 +1,10 @@
 <template>
   <div class="company-container">
-    <a-button type="primary" size="small" style="margin-bottom: 10px" @click="createCompany"
+    <a-button
+      type="primary"
+      size="small"
+      style="margin-bottom: 10px"
+      @click="createCompany"
       >新建</a-button
     >
     <a-table
@@ -39,7 +43,7 @@
     <CusModule @cancel="cancel" :visible="visible" :width="800">
       <a-form :form="form">
         <a-form-item
-          label="公司名称"
+          label="名称"
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
         >
@@ -48,26 +52,42 @@
               'projectName',
               {
                 initialValue: row.projectName || '',
-                rules: [{ required: true, message: '请输入公司名称' }],
+                rules: [{ required: true, message: '请输入名称' }],
               },
             ]"
-            placeholder="请输入公司名称"
+            placeholder="请输入名称"
           />
         </a-form-item>
         <a-form-item
-          label="公司地址"
+          label="地址"
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
         >
-          <a-input
+          <SelectArea
             v-decorator="[
-              'address',
+              'area',
               {
-                initialValue: row.address || '',
-                rules: [{ required: true, message: '请输入公司地址' }],
+                initialValue: row.area || [],
+                rules: [{ required: true, message: '请选择地址' }],
               },
             ]"
-            placeholder="请输入公司地址"
+            @change="selectChangeArea"
+          />
+        </a-form-item>
+        <a-form-item
+          label="详细地址"
+          :label-col="formItemLayout.labelCol"
+          :wrapper-col="formItemLayout.wrapperCol"
+        >
+          <a-textarea
+            v-decorator="[
+              'detailAddress',
+              {
+                initialValue: row.detailAddress || '',
+                rules: [{ required: true, message: '请输入详细地址' }],
+              },
+            ]"
+            :auto-size="{ minRows: 1 }"
           />
         </a-form-item>
         <a-form-item
@@ -82,7 +102,7 @@
               'buildingNum',
               {
                 initialValue: row.buildingNum,
-                rules: [{ required: true, message: '建筑物数量' }],
+                rules: [{ required: false, message: '建筑物数量' }],
               },
             ]"
             :min="1"
@@ -137,6 +157,7 @@
 <script>
 import api from "@/axios/api";
 import CusModule from "@/components/common/CusModule.vue";
+import SelectArea from "@/components/common/SelectArea.vue";
 
 const columns = [
   {
@@ -178,11 +199,13 @@ const formItemLayout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 18 },
 };
+
 export default {
   name: "company-list-page",
 
   components: {
     CusModule,
+    SelectArea,
   },
 
   data() {
@@ -216,7 +239,7 @@ export default {
     },
 
     edit(record) {
-      this.row = record;
+      this.row = { area: [], ...record };
       this.visible = true;
     },
 
@@ -247,7 +270,10 @@ export default {
     },
 
     async update(values) {
-      const { code } = await api.company.updateCompanyList({ areaCode: 324 ,...values });
+      const { code } = await api.company.updateCompanyList({
+        areaCode: 324,
+        ...values,
+      });
       if (code === 200) {
         this.row = {};
         this.visible = false;
@@ -256,7 +282,10 @@ export default {
     },
 
     async create(values) {
-      const { code } = await api.company.createCompanyList({ areaCode: 111, ...values });
+      const { code } = await api.company.createCompanyList({
+        areaCode: 111,
+        ...values,
+      });
       if (code === 200) {
         this.row = {};
         this.visible = false;
@@ -270,7 +299,13 @@ export default {
       if (code === 200) {
         this.fetchList();
       }
-    }
+    },
+
+    async selectChangeArea(val) {
+      this.form.setFieldsValue({
+        area: val,
+      });
+    },
   },
 };
 </script>
