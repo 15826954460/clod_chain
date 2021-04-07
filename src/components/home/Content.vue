@@ -86,6 +86,9 @@
             <a-menu-item key="/unit" v-if="userType !== 4">
               单位管理
             </a-menu-item>
+            <a-menu-item key="/building" v-if="userType !== 4">
+              建筑管理
+            </a-menu-item>
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>

@@ -58,6 +58,11 @@ const routes = [
         name: "company-manage-page",
         component: () => import("../views/base-manage/Company.vue"),
       },
+      {
+        path: "building",
+        name: "building-manage-page",
+        component: () => import("../views/base-manage/Building.vue"),
+      },
     ],
   },
 ];
