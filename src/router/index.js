@@ -10,7 +10,7 @@ const routes = [
     children: [
       {
         path: "",
-        name: "test-home",
+        name: "home-test",
         component: () => import("../views/Test.vue"),
       },
       {
@@ -25,17 +25,17 @@ const routes = [
       },
       {
         path: "company-list",
-        name: "manage-list-page",
+        name: "company-list-page",
         component: () => import("../views/user/Company.vue"),
       },
       {
         path: "agent-list",
-        name: "manage-list-page",
+        name: "agent-list-page",
         component: () => import("../views/user/Agent.vue"),
       },
       {
         path: "user-list",
-        name: "manage-list-page",
+        name: "user-list-page",
         component: () => import("../views/user/User.vue"),
       },
       {
@@ -44,7 +44,7 @@ const routes = [
         component: () => import("../views/user/OptionLog.vue"),
       },
       {
-        path: "",
+        path: "equipment",
         name: "equipment-page",
         component: () => import("../views/equipment/Index.vue"),
       },
