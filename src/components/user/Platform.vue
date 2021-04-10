@@ -183,7 +183,6 @@ export default {
 
 <style scoped lang="scss">
 #platformContainer {
-  padding-top: 20px;
   /deep/ .ant-table-body {
     margin: 0;
   }

@@ -312,6 +312,6 @@ export default {
 
 <style scoped lang="scss">
 .company-container {
-  margin-top: 20px;
+  margin: 20px;
 }
 </style>

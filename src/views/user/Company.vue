@@ -55,4 +55,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.manage-container {
+  padding: 20px;
+}
 </style>
